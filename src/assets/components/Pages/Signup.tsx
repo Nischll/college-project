@@ -8,7 +8,7 @@ function Signup() {
       <div className="flex flex-col gap-[25px]">
         <header className="flex flex-col items-center h-[120px] gap-[10px]">
           <img src="src\images\lines.png" alt="" className="flex justify-center items-center h-[50px] w-[70px]"/>
-          <h1 className=" h-[45px] w-full flex justify-center items-center text-[32px] font-poppins font-semibold">Login to your account</h1>
+          <h1 className=" h-[45px] w-full flex justify-center items-center text-[32px] font-poppins font-semibold">Signup to your account</h1>
         </header>
         <form className="h-[230px] flex flex-col gap-[6px]">
           <section className="flex flex-col h-[70px] font-poppins">
@@ -38,6 +38,7 @@ function Signup() {
         <Link to="/">
           <span className="text-[#1366D9] font-poppins">Login in</span>
         </Link>
+        {/* <a href="/" className="text-[#1366D9] font-poppins">Login in</a> */}
       </footer>
     </main>
     </>

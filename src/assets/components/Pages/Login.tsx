@@ -37,6 +37,7 @@ function Login (){
         <Link to="/signup">
           <span className="text-[#1366D9] font-poppins">Sign up</span>
         </Link>
+        {/* <a href="/signup" className="text-[#1366D9] font-poppins">Sign up</a> */}
       </footer>
     </main>
     </>
