@@ -43,21 +43,15 @@ function App() {
           children:[
             {
               index: true,
-              element:(
-                <Suspense><Dashboard/></Suspense>
-              )
+              element:<Dashboard/>
             },
             {
-              path:"/layout/dashboard",
-              element:(
-                <Suspense fallback = {<h2>Dashboard loading..........</h2>}><Dashboard/></Suspense>
-              )
+              path:"dashboard",
+              element:<Dashboard/>
             },
             {
-              path:"/layout/inventory",
-              element:(
-                <Suspense fallback = {<h2>Inventory loading..........</h2>}><Inventory/></Suspense>
-              )
+              path:"inventory",
+              element:<Inventory/>
             },
           ]
         },

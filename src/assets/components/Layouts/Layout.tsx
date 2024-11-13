@@ -1,6 +1,5 @@
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
-// import Dashboard from "../Pages/Dashboard";
 import { Outlet } from "react-router-dom";
 
 const Layout = () => {
@@ -12,7 +11,6 @@ const Layout = () => {
           <Sidebar/>     
 
           <main className="col-start-3 col-end-12 mx-4 mt-4 bg-green-100">
-          {/* <Dashboard/> */}
             <Outlet/>
           </main>     
         </div>
