@@ -10,6 +10,7 @@ function App() {
   const Layout = lazy(() => import ("./assets/components/Layouts/Layout"));
   const Dashboard = lazy(() => import ("./assets/components/Pages/Dashboard"));
   const Inventory = lazy(() => import ("./assets/components/Pages/Inventory"));
+  const Reports = lazy(() => import ("./assets/components/Pages/Reports"));
 
   return (
     <>
@@ -52,6 +53,10 @@ function App() {
             {
               path:"inventory",
               element:<Inventory/>
+            },
+            {
+              path:"reports",
+              element:<Reports/>
             },
           ]
         },

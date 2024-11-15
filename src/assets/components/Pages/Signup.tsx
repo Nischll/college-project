@@ -13,19 +13,19 @@ function Signup() {
         <form className="h-[230px] flex flex-col gap-[6px]">
           <section className="flex flex-col h-[70px] font-poppins">
             <label htmlFor="name" className="h-[21px] font-semibold text-[16px] text-[#525252]">Name</label>
-            <input type="text" id="name" placeholder="enter your name" className="h-[40px] py-[6px] px-[10px] rounded text-[14px] leading-5 font-normal mt-[6px] border border-[#CCCCCC] placeholder:text-[#CCCCCC]"/>
+            <input type="text" id="name" placeholder="enter your name" className="h-[40px] py-[6px] px-[10px] rounded text-[14px] leading-5 font-normal mt-[6px] border border-[#CCCCCC] placeholder:text-[#CCCCCC] focus:outline-none focus:ring-1 focus:ring-blue-500"/>
             <span className="h-[15px] text-[12px] font-normal text-red-600 px-[10px] mt-[-3px]"></span>
           </section>
 
           <section className="flex flex-col h-[70px] font-poppins">
             <label htmlFor="email" className="h-[21px] font-semibold text-[16px] text-[#525252]">Email</label>
-            <input type="text" id="email" placeholder="enter your email" className="h-[40px] py-[6px] px-[10px] rounded text-[14px] leading-5 font-normal mt-[6px] border border-[#CCCCCC] placeholder:text-[#CCCCCC]"/>
+            <input type="text" id="email" placeholder="enter your email" className="h-[40px] py-[6px] px-[10px] rounded text-[14px] leading-5 font-normal mt-[6px] border border-[#CCCCCC] placeholder:text-[#CCCCCC] focus:outline-none focus:ring-1 focus:ring-blue-500"/>
             <span className="h-[15px] text-[12px] font-normal text-red-600 px-[10px] mt-[-3px]"></span>
           </section>
 
           <section className="flex flex-col h-[70px] font-poppins">
             <label htmlFor="password" className="h-[21px] font-semibold text-[16px] text-[#525252]">Password</label>
-            <input type="password" id="password" placeholder="password" className="h-[40px] py-[6px] px-[10px] rounded text-[14px] leading-5 font-normal mt-[6px] border border-[#CCCCCC] placeholder:text-[#CCCCCC]"/>
+            <input type="password" id="password" placeholder="password" className="h-[40px] py-[6px] px-[10px] rounded text-[14px] leading-5 font-normal mt-[6px] border border-[#CCCCCC] placeholder:text-[#CCCCCC] focus:outline-none focus:ring-1 focus:ring-blue-500"/>
             <span className="h-[15px] text-[12px] font-normal text-red-600 px-[10px] mt-[-3px]"></span>
           </section>
         </form>
