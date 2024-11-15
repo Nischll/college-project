@@ -11,6 +11,9 @@ function App() {
   const Dashboard = lazy(() => import ("./assets/components/Pages/Dashboard"));
   const Inventory = lazy(() => import ("./assets/components/Pages/Inventory"));
   const Reports = lazy(() => import ("./assets/components/Pages/Reports"));
+  const Orders = lazy(() => import ("./assets/components/Pages/Orders"));
+  const ManageStores = lazy(() => import ("./assets/components/Pages/ManageStores"));
+  const Settings = lazy(() => import ("./assets/components/Pages/Settings"));
 
   return (
     <>
@@ -58,7 +61,19 @@ function App() {
               path:"reports",
               element:<Reports/>
             },
+            {
+              path:"orders",
+              element:<Orders/>
+            },
+            {
+              path:"managestores",
+              element:<ManageStores/>
+            },
           ]
+        },
+        {
+          path:"/settings",
+          element:<Suspense fallback = {<h2>Settings page loading...........</h2>}><Settings/></Suspense>
         },
         
       ])}/>
