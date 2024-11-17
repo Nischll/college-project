@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import {RouterProvider, createBrowserRouter} from 'react-router-dom';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import Hero from './assets/components/Layouts/Hero';
 import { AuthProvider } from "./assets/components/Layouts/AuthContext";
 import { Provider } from 'react-redux';
@@ -18,8 +19,10 @@ function App() {
   const Settings = lazy(() => import ("./assets/components/Pages/Settings"));
   // const ProductList = lazy(() => import ("./assets/components/Redux/ProductList"));
 
+  const Client = new QueryClient();
   return (
     <>
+    <QueryClientProvider client={Client}>
     <Provider store={store}>
     <AuthProvider>
       <RouterProvider router = {createBrowserRouter([
@@ -88,6 +91,7 @@ function App() {
       ])}/>
     </AuthProvider>
     </Provider>
+    </QueryClientProvider>
     </>
   )
 }
