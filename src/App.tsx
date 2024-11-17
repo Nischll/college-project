@@ -1,22 +1,27 @@
 import { lazy, Suspense } from 'react';
 import {RouterProvider, createBrowserRouter} from 'react-router-dom';
 import Hero from './assets/components/Layouts/Hero';
+import { AuthProvider } from "./assets/components/Layouts/AuthContext";
+import { Provider } from 'react-redux';
+import store from './assets/components/Redux/Store';
 
 function App() {
 
   const Login = lazy(() => import ("./assets/components/Pages/Login"));
   const Signup = lazy(() => import ("./assets/components/Pages/Signup"));
-  // const Hero = lazy(() => import ("./assets/components/Hero"));
   const Layout = lazy(() => import ("./assets/components/Layouts/Layout"));
   const Dashboard = lazy(() => import ("./assets/components/Pages/Dashboard"));
   const Inventory = lazy(() => import ("./assets/components/Pages/Inventory"));
   const Reports = lazy(() => import ("./assets/components/Pages/Reports"));
   const Orders = lazy(() => import ("./assets/components/Pages/Orders"));
-  const ManageStores = lazy(() => import ("./assets/components/Pages/ManageStores"));
+  // const ManageStores = lazy(() => import ("./assets/components/Pages/ManageStores"));
   const Settings = lazy(() => import ("./assets/components/Pages/Settings"));
+  // const ProductList = lazy(() => import ("./assets/components/Redux/ProductList"));
 
   return (
     <>
+    <Provider store={store}>
+    <AuthProvider>
       <RouterProvider router = {createBrowserRouter([
         {
           path:"/",
@@ -65,10 +70,14 @@ function App() {
               path:"orders",
               element:<Orders/>
             },
-            {
-              path:"managestores",
-              element:<ManageStores/>
-            },
+            // {
+            //   path:"managestores",
+            //   element:<ManageStores/>
+            // },
+            // {
+            //   path:"product",
+            //   element:<ProductList/>
+            // },
           ]
         },
         {
@@ -77,6 +86,8 @@ function App() {
         },
         
       ])}/>
+    </AuthProvider>
+    </Provider>
     </>
   )
 }

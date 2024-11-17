@@ -1,11 +1,10 @@
 import {Link, useNavigate} from 'react-router-dom';
+
 function Login (){
-
-  const signupNavigate = useNavigate();
-
-  const signup = () => {
-    signupNavigate('/signup');
-  };
+  const navigate = useNavigate();
+  const handleLogin = () => {
+    navigate("/layout/dashboard");
+  }
   return(
     <>
     <main className="flex flex-col gap-[40px]">
@@ -28,8 +27,10 @@ function Login (){
           </section>
         </form>
         <footer className="flex flex-col items-center h-[78px] gap-[8px]">
-          <button type="submit" className="h-[35px] w-full bg-customBlue rounded border border-customBlue font-poppins text-white text-[16px] leading-8 font-medium">Login</button>
-          <button onClick={signup} className="h-[35px] w-full bg-white rounded border border-[#2159AB] font-poppins text-[16px] text-[#2159AB] leading-8 font-medium">Sign up</button>
+          <button type="submit" onClick={handleLogin} className="h-[35px] w-full bg-customBlue rounded border border-customBlue font-poppins text-white text-[16px] leading-8 font-medium">Login</button>
+          <Link to="/signup" className='w-full'>
+            <button className="h-[35px] w-full bg-white rounded border border-[#2159AB] font-poppins text-[16px] text-[#2159AB] leading-8 font-medium">Sign up</button>
+          </Link>
         </footer>
       </div>
       <footer className="flex items-center justify-center h-[20px] text-[14px] gap-[3px]">
@@ -37,7 +38,6 @@ function Login (){
         <Link to="/signup">
           <span className="text-[#1366D9] font-poppins">Sign up</span>
         </Link>
-        {/* <a href="/signup" className="text-[#1366D9] font-poppins">Sign up</a> */}
       </footer>
     </main>
     </>
