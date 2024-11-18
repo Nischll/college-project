@@ -1,26 +1,27 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 
-const AuthContext = createContext();
+interface AuthContextType {
+  user: any; // Adjust the type based on your user shape
+  setUser: React.Dispatch<React.SetStateAction<any>>; // Adjust the type as necessary
+}
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState({
-    isAuthenticated: false,
-    role: null, // "admin" or "user"
-  });
+const AuthContext = createContext<AuthContextType | undefined>(undefined); // Initial context is undefined
 
-  const login = (role) => {
-    setUser({ isAuthenticated: true, role }); // Set role on login
-  };
-
-  const logout = () => {
-    setUser({ isAuthenticated: false, role: null }); // Reset on logout
-  };
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<any>(null); // Adjust the initial state if needed
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, setUser }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+// Custom hook to use the AuthContext
+export const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};

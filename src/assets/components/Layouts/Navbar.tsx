@@ -4,7 +4,7 @@ const Navbar = () => {
   return (
     <>
     <header className="h-[65px] p-2 flex flex-row justify-between items-center">
-      <Link to="/layout">
+      <Link to="/layout/inventory">
       <section className="flex flex-row items-center gap-4 h-[38px] pl-3">
         <img src="src\images\lines.png" alt="Image Description" className="h-[30px]"/>
         <img src="src\images\inventory-logo.png" alt="Image Description" className="h-[30px]"/>
