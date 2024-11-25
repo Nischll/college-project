@@ -8,14 +8,14 @@ import { useEffect } from 'react';
 function Login (){
   const { handleSubmit, reset, register } = useForm();
   const navigate = useNavigate();
-  const {user,setUser} = useAuth();
+  const {setUser} = useAuth();
 
-  useEffect(() => {
-    // Redirect to dashboard if the user is already logged in
-    if (user?.token) {
-      navigate("/layout/dashboard");
-    }
-  }, [user, navigate]);
+  // useEffect(() => {
+  //   // Redirect to dashboard if the user is already logged in
+  //   if (user?.token) {
+  //     navigate("/layout/dashboard");
+  //   }
+  // }, [user, navigate]);
 
   const postData = useMutation({
     mutationKey: ["save"],

@@ -53,10 +53,10 @@ function App() {
             ),
           errorElement:<>Page not found</>,
           children:[
-            {
-              index: true,
-              element:<Dashboard/>
-            },
+            // {
+            //   index: true,
+            //   element:<Dashboard/>
+            // },
             {
               path:"dashboard",
               element:<Dashboard/>

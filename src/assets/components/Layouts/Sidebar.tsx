@@ -1,8 +1,9 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 
 const Sidebar = ({}) => {
-  const {user} = useAuth();
+  const {user, setUser} = useAuth();
+  const navigate = useNavigate();
 
   const menuItems = [
     { name: "Dashboard", path: "dashboard", icon: "home.png", visible: user.role === "admin" },
@@ -16,8 +17,14 @@ const Sidebar = ({}) => {
   
   const footerItems = [
     { name: "Settings", path: "/settings", icon: "settings.png" },
-    { name: "Log Out", path: "/", icon: "logout.png" },
+    // { name: "Log Out", path: "/", icon: "logout.png" },
   ];
+
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem("user");
+    navigate("/");
+  };
 
   const navLinkStyle = ({ isActive }) =>
     isActive
@@ -37,7 +44,14 @@ const Sidebar = ({}) => {
   return (
     <aside className="col-span-2 flex flex-col justify-between px-2 py-[16px] h-[calc(100vh-73px)]">
       <ul className="flex flex-col gap-[12px] px-3">{renderSidebar(menuItems)}</ul>
-      <ul className="flex flex-col gap-[12px] px-4">{renderSidebar(footerItems)}</ul>
+      <ul className="flex flex-col gap-[12px] px-4">
+        {renderSidebar(footerItems)}
+
+        <li onClick={handleLogout} className="flex items-center gap-[12px] h-[55px] cursor-pointer text-[#7A7A7A] hover:text-blue-500">
+          <img src="src/images/logout.png" alt="Log Out" className="h-[26px]" />
+          <h1 className="font-semibold text-[17px] leading-7 h-[30px]">Log Out</h1>
+        </li>
+        </ul>
     </aside>
   );
 };
