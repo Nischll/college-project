@@ -3,10 +3,12 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import {Link, useNavigate} from 'react-router-dom';
 import { useAuth } from '../Layouts/AuthContext';
-import { useEffect } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { baseSchema } from '../extraComponents/Schemas';
+import { toast } from 'react-toastify';
 
 function Login (){
-  const { handleSubmit, reset, register } = useForm();
+  const { handleSubmit, reset, register, formState: {errors} } = useForm({resolver: zodResolver(baseSchema)});
   const navigate = useNavigate();
   const {setUser} = useAuth();
 
@@ -26,10 +28,20 @@ function Login (){
       const { token, user } = response.data;
       setUser({ ...user, token });
       reset();
-      navigate("/layout/dashboard");
+      toast.success("Login Successful!", {
+        autoClose: 2000,
+      });
+      if(user.role === "admin"){
+        navigate("/layout/dashboard");
+      }else{
+        navigate("/layout/inventory");
+      }
     },
     onError: (error) => {
       console.error("Submission failed:", error);
+      toast.error("Login Failed", {
+        autoClose: 2000,
+      });
     },
   });
   const submit = (data:any) => {
@@ -49,13 +61,13 @@ function Login (){
           <section className="flex flex-col h-[70px] font-poppins">
             <label htmlFor="email" className="h-[21px] font-semibold text-[18px] text-[#525252]">Email</label>
             <input type="text" id="email" placeholder="enter your email" {...register('email')} className="h-[45px] py-[6px] px-[10px] rounded text-[14px] leading-5 font-normal mt-[6px] border border-[#CCCCCC] placeholder:text-[#CCCCCC] focus:outline-none focus:ring-1 focus:ring-blue-500"/>
-            <span className="h-[15px] text-[12px] font-normal text-red-600 px-[10px] mt-[-3px]"></span>
+            {errors.email && <span className="h-[15px] text-[12px] font-normal text-red-600 px-[10px] mt-[-2px]">{errors.email.message}</span>}
           </section>
 
           <section className="flex flex-col h-[70px] font-poppins">
             <label htmlFor="password" className="h-[21px] font-semibold text-[18px] text-[#525252]">Password</label>
             <input type="password" id="password" placeholder="password" {...register('password')} className="h-[45px] py-[6px] px-[10px] rounded text-[14px] leading-5 font-normal mt-[6px] border border-[#CCCCCC] placeholder:text-[#CCCCCC] focus:outline-none focus:ring-1 focus:ring-blue-500"/>
-            <span className="h-[15px] text-[12px] font-normal text-red-600 px-[10px] mt-[-3px]"></span>
+            {errors.password && <span className="h-[15px] text-[12px] font-normal text-red-600 px-[10px] mt-[-3px]"> {errors.password.message}</span>}
           </section>
           <footer className="flex flex-col items-center h-[78px] gap-[8px] my-[30px]">
             <button type="submit" className="h-[35px] w-full bg-customBlue rounded border border-customBlue font-poppins text-white text-[16px] leading-8 font-medium">Login</button>

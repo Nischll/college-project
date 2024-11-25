@@ -6,17 +6,17 @@ const Sidebar = ({}) => {
   const navigate = useNavigate();
 
   const menuItems = [
-    { name: "Dashboard", path: "dashboard", icon: "home.png", visible: user.role === "admin" },
-    { name: "Inventory", path: "inventory", icon: "cart.png" },
+    { name: "Dashboard", path: "dashboard", icon: "home.png", visible: user?.role === "admin" },
+    { name: "Inventory", path: "inventory", icon: "cart.png", visible: true },
     { name: "Reports", path: "reports", icon: "board.png", visible: user.role === "admin" },
-    { name: "Suppliers", path: "/", icon: "suppliers.png" },
-    { name: "Orders", path: "orders", icon: "order.png" },
+    { name: "Suppliers", path: "/", icon: "suppliers.png", visible: true },
+    { name: "Orders", path: "orders", icon: "order.png", visible: true },
     // { name: "Manage Stores", path: "managestores", icon: "checklist.png" },
     // { name: "Product List", path: "product", icon: "checklist.png" },
   ];
   
   const footerItems = [
-    { name: "Settings", path: "/settings", icon: "settings.png" },
+    { name: "Settings", path: "settings", icon: "settings.png" },
     // { name: "Log Out", path: "/", icon: "logout.png" },
   ];
 

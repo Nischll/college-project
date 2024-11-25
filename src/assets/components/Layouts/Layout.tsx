@@ -1,8 +1,7 @@
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useAuth } from "./AuthContext";
-// import { useEffect } from "react";
 
 const Layout = () => {
   const { user } = useAuth();

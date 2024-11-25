@@ -5,6 +5,9 @@ import Hero from './assets/components/Layouts/Hero';
 import { AuthProvider } from "./assets/components/Layouts/AuthContext";
 import { Provider } from 'react-redux';
 import store from './assets/components/Redux/Store';
+import ProtectedRoute from './assets/components/extraComponents/ProtectedRoute';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
 
@@ -22,6 +25,7 @@ function App() {
   const Client = new QueryClient();
   return (
     <>
+    <ToastContainer/>
     <QueryClientProvider client={Client}>
     <Provider store={store}>
     <AuthProvider>
@@ -58,20 +62,44 @@ function App() {
             //   element:<Dashboard/>
             // },
             {
-              path:"dashboard",
-              element:<Dashboard/>
+              path: "dashboard",
+              element: (
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <Dashboard />
+                </ProtectedRoute>
+              ),
             },
             {
               path:"inventory",
-              element:<Inventory/>
+              element:(
+                <ProtectedRoute allowedRoles={["admin", "user"]}>
+                  <Inventory/>
+                </ProtectedRoute>
+              ),
             },
             {
               path:"reports",
-              element:<Reports/>
+              element:(
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <Reports/>
+                </ProtectedRoute>
+              )
             },
             {
               path:"orders",
-              element:<Orders/>
+              element:(
+                <ProtectedRoute allowedRoles={["admin", "user"]}>
+                  <Orders/>
+                </ProtectedRoute>
+              )
+            },
+            {
+              path:"settings",
+              element:(
+                <ProtectedRoute allowedRoles={["admin", "user"]}>
+                  <Settings/>
+                </ProtectedRoute>
+              )
             },
             // {
             //   path:"managestores",
@@ -82,12 +110,7 @@ function App() {
             //   element:<ProductList/>
             // },
           ]
-        },
-        {
-          path:"/settings",
-          element:<Suspense fallback = {<h2>Settings page loading...........</h2>}><Settings/></Suspense>
-        },
-        
+        },        
       ])}/>
     </AuthProvider>
     </Provider>

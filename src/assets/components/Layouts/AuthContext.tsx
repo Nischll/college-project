@@ -10,15 +10,15 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true); // Start in loading state
+  const [isLoading, setIsLoading] = useState<boolean>(true); 
 
   useEffect(() => {
-    // Simulate loading user data from persistent storage (e.g., localStorage)
+    // Simulate loading user data from persistent storage
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser)); // Restore user data
+      setUser(JSON.parse(storedUser)); 
     }
-    setIsLoading(false); // Mark loading as complete
+    setIsLoading(false);
   }, []);
 
   const saveUser = (userData: any) => {

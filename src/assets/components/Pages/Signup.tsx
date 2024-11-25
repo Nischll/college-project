@@ -1,7 +1,12 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { signupSchema } from "../extraComponents/Schemas";
+import ConfirmDialog from "../extraComponents/ConfirmDialog";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 function Signup() {
   // http://localhost:3000/signup
@@ -9,14 +14,39 @@ function Signup() {
     mutationKey:["save"],
     mutationFn(data){
       return axios.post('http://localhost:3000/signup', data)
+    },
+    onSuccess: () => {
+      toast.success("Signup Successful!", {
+        autoClose: 2000,
+      }); // Success toast
+    },
+    onError: () => {
+      toast.error("Signup Failed: user is already exist", {
+        autoClose: 2000,
+      }); // Error toast
     }
   });
-  const {register, handleSubmit, reset} = useForm();
+  const {register, handleSubmit, reset, formState:{errors}} = useForm({resolver: zodResolver(signupSchema)});
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [formData, setFormData] = useState(null);  // To store the form data temporarily
+
   const submit = (data:any) => {
-    postData.mutate(data);
-    reset();
-    // console.log(data);
-  }
+    setFormData(data); // Store the data to be submitted
+    setOpenDialog(true); // Open the confirmation dialog
+  };
+
+  const handleConfirm = () => {
+    if (formData) {
+      postData.mutate(formData);  // Perform the form submission
+      reset();  // Reset the form after submission
+      setOpenDialog(false);  // Close the dialog
+    }
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);  // Close the dialog without submitting
+  };
   return (
     <>
     <main className="flex flex-col gap-[35px]">
@@ -27,21 +57,21 @@ function Signup() {
         </header>
         <form onSubmit={handleSubmit(submit)} className="h-[230px] flex flex-col gap-[6px]">
           <section className="flex flex-col h-[70px] font-poppins">
-            <label htmlFor="name" className="h-[21px] font-semibold text-[16px] text-[#525252]">Name</label>
+            <label htmlFor="name" className="h-[21px] font-semibold text-[16px] text-[#525252]">Full Name</label>
             <input type="text" id="name" placeholder="enter your name" {...register('name')} className="h-[40px] py-[6px] px-[10px] rounded text-[14px] leading-5 font-normal mt-[6px] border border-[#CCCCCC] placeholder:text-[#CCCCCC] focus:outline-none focus:ring-1 focus:ring-blue-500"/>
-            <span className="h-[15px] text-[12px] font-normal text-red-600 px-[10px] mt-[-3px]"></span>
+            {errors.name && <span className="h-[15px] text-[12px] font-normal text-red-600 px-[10px] mt-[-2px]">{errors.name.message}</span>}
           </section>
 
           <section className="flex flex-col h-[70px] font-poppins">
             <label htmlFor="email" className="h-[21px] font-semibold text-[16px] text-[#525252]">Email</label>
-            <input type="text" id="email" placeholder="enter your email" {...register('email')} className="h-[40px] py-[6px] px-[10px] rounded text-[14px] leading-5 font-normal mt-[6px] border border-[#CCCCCC] placeholder:text-[#CCCCCC] focus:outline-none focus:ring-1 focus:ring-blue-500"/>
-            <span className="h-[15px] text-[12px] font-normal text-red-600 px-[10px] mt-[-3px]"></span>
+            <input type="text" id="email" placeholder="example@ims.np" {...register('email')} className="h-[40px] py-[6px] px-[10px] rounded text-[14px] leading-5 font-normal mt-[6px] border border-[#CCCCCC] placeholder:text-[#CCCCCC] focus:outline-none focus:ring-1 focus:ring-blue-500"/>
+            {errors.email && <span className="h-[15px] text-[12px] font-normal text-red-600 px-[10px] mt-[-3px]">{errors.email.message}</span>}
           </section>
 
           <section className="flex flex-col h-[70px] font-poppins">
             <label htmlFor="password" className="h-[21px] font-semibold text-[16px] text-[#525252]">Password</label>
             <input type="password" id="password" placeholder="password" {...register('password')} className="h-[40px] py-[6px] px-[10px] rounded text-[14px] leading-5 font-normal mt-[6px] border border-[#CCCCCC] placeholder:text-[#CCCCCC] focus:outline-none focus:ring-1 focus:ring-blue-500"/>
-            <span className="h-[15px] text-[12px] font-normal text-red-600 px-[10px] mt-[-3px]"></span>
+            {errors.password && <span className="h-[15px] text-[12px] font-normal text-red-600 px-[10px] mt-[-2px]">{errors.password.message}</span>}
           </section>
           <footer className="flex items-center h-[35px] mt-4">
             <button type="submit" className="h-[35px] w-full bg-white rounded border border-[#2159AB] font-poppins text-[16px] text-[#2159AB] leading-8 font-medium">Sign up</button>
@@ -53,7 +83,17 @@ function Signup() {
         <Link to="/">
           <span className="text-[#1366D9] font-poppins">Login in</span>
         </Link>
-        {/* <a href="/" className="text-[#1366D9] font-poppins">Login in</a> */}
+
+         {/* Confirm Dialog Component */}
+      <ConfirmDialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        onConfirm={handleConfirm}
+        title="Confirm Your Signup"
+        description="Are you sure you want to submit your signup details?"
+        confirmationText="Yes, Submit"
+        cancellationText="Cancel"
+      />
       </footer>
     </main>
     </>
