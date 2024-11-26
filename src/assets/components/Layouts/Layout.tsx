@@ -26,10 +26,8 @@ const Layout = () => {
       <Navbar />
       <div className="grid grid-cols-11 relative h-[calc(100%-65px)]">
         <Sidebar {...user.role} />
-        <main className="col-span-9 overflow-hidden pb-3 h-full bg-gray-200">
-          <div className="ml-2 mt-2 mr-1 h-full pr-4 overflow-hidden hover:overflow-y-auto bg-white">
-            <Outlet />
-          </div>
+        <main className="col-span-9 overflow-hidden py-3 px-3 h-full bg-gray-200">
+          <Outlet />
         </main>
       </div>
     </div>
