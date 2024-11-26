@@ -11,9 +11,9 @@ export const baseSchema = z.object({
 
   password: z
   .string()
-  .regex(passwordRegex, {message:"Password must contain at least 8 characters, 1 uppercase letter, 1 number, and 1 special character."})
-  // .min(6, "Password must be at least 6 characters")
-  // .max(20, "Password must be less than 20 characters"),
+  // .regex(passwordRegex, {message:"Password must contain at least 8 characters, 1 uppercase letter, 1 number, and 1 special character."})
+  .min(6, "Password must be at least 6 characters")
+  .max(20, "Password must be less than 20 characters"),
 });
 
 export const signupSchema = baseSchema.extend({
