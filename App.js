@@ -4,6 +4,9 @@ const cors = require('cors');
 const dbConfig = require('./dbConfig'); 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
 
 const JWT_SECRET = 'mySuperSecretKey@1234';
 const app = express();
@@ -80,7 +83,7 @@ app.post('/login', async (req, res) => {
       return res.status(404).send({ error: 'User not found' });
     }
 
-    const [dbEmail, dbPassword, role] = result.rows[0]; // Extract email and password from the query result
+    const [dbEmail, dbPassword, role] = result.rows[0]; 
     // console.log('Email:', dbEmail, 'Password:', dbPassword, 'Role:', role);
 
     // Compare entered password with hashed password
@@ -107,6 +110,60 @@ app.post('/login', async (req, res) => {
     }
   }
 });
+
+// ADD PRODUCT
+// Multer setup for image upload (image will be uploaded to server)
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Set the destination folder for image uploads
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Add a timestamp to the filename
+  }
+});
+const upload = multer({ storage });
+
+app.post('/products', upload.single('image'), async (req, res) => {
+  const { product_name, category, buying_price, quantity, unit, expiry_date } = req.body;
+  const image = req.file ? fs.readFileSync(path.join(__dirname, 'uploads', req.file.filename)) : null;
+
+  if (!product_name || !buying_price || !quantity || !expiry_date) {
+    return res.status(400).send("Missing required fields: product_name, buying_price, quantity, or expiry_date.");
+  }
+
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbConfig);
+
+    // Insert product into the Products table
+    const query = `
+      INSERT INTO Products (product_name, category, buying_price, quantity, unit, expiry_date, image)
+      VALUES (:product_name, :category, :buying_price, :quantity, :unit, TO_DATE(:expiry_date, 'YYYY-MM-DD'), :image)
+    `;
+    
+    const binds = {
+      product_name,
+      category,
+      buying_price,
+      quantity,
+      unit,
+      expiry_date,
+      image
+    };
+
+    const result = await connection.execute(query, binds, { autoCommit: true });
+
+    res.status(201).send({ message: 'Product added successfully', result });
+  } catch (err) {
+    console.error('Error executing query:', err);
+    res.status(500).send({ error: 'Failed to add product' });
+  } finally {
+    if (connection) {
+      await connection.close();
+    }
+  }
+});
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
