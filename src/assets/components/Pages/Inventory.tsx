@@ -1,62 +1,72 @@
-// import ManageStores from "../Pages/ManageStores";
-// import { Link } from "react-router-dom";
 import { useState } from "react";
 import GenericFormDialog from "../extraComponents/GenericFormDialogue.tsx";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
+import InventoryTable from "./InventoryTable.tsx";
 
 const Inventory = () => {
 
-  // const products = [
-  //   { id: 1, name: "Laptop", price: 100000 },
-  //   { id: 2, name: "IPhone", price: 150000 },
-  //   { id: 3, name: "Tablet", price: 250000 },
-  // ];
   const [openDialog, setOpenDialog] = useState(false);
 
   const productFields = [
+    // { id: "image", label: "Image", type: "file",InputLabelProps: { shrink: true }, required: false },
     { id: "product_name", label: "Product Name", type: "text", required: true },
-    { id: "category", label: "Category", type: "text", required: true },
+    { id: "category", label: "Category", type: "select",
+      options: [
+        { label: "Kitchen Supplies", value: "kitchen supplies" },
+        { label: "Beverages", value: "beverages" },
+        { label: "Noodles", value: "noodles" },
+        { label: "Snacks", value: "snacks" },
+        { label: "Household Supplies", value: "household supplies" },
+        { label: "Dairy & Eggs", value: "dairy and eggs" },
+        { label: "Personal Care", value: "personal care" },
+        { label: "Sweets & Chocolates", value: "sweets and chocolates" },
+      ],
+      required: true },
     { id: "buying_price", label: "Buying Price", type: "number", required: true },
     { id: "quantity", label: "Quantity", type: "number", required: true },
-    { id: "expiry_date", label: "Expiry Date", type: "date", required: true },
-    { id: "image", label: "Image URL", type: "url", required: false },
+    { id: "unit", label: "Unit", type: "text", required: true },
+    { id: "expiry_date", label: "Expiry Date", type: "date",
+      InputLabelProps: { shrink: true },
+      validate: (value) => {
+      const today = new Date();
+      const selectedDate = new Date(value);
+      return selectedDate >= today || "Expiry date cannot be in the past";
+    }, 
+    required: true },
   ];
 
   const handleOpenDialog = () => setOpenDialog(true);
-  const handleCloseDialog = () => setOpenDialog(false);
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    toast.error("Cancel to Add Product", {
+      autoClose: 1000,
+    });
+  };
+
+  const postFormData = useMutation({
+    mutationKey:["save"],
+    mutationFn(formData){
+      return axios.post("http://localhost:3000/products", formData)
+    }
+  });
 
   const handleSubmit = async (formData) => {
     try {
-      const response = await axios.post("http://localhost:3000/products", formData, {
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
-      });
-      console.log("Product added successfully:", response.data);
+      await postFormData.mutate(formData);
+      toast.success("Producted Added Successfully", {
+        autoClose: 2000,
+      }); 
     } catch (error) {
-      console.error("Error adding product:", error.response || error.message);
+      console.error("Error adding product:");
+      toast.error("Failed to Add Product!", {
+        autoClose: 2000,
+      }); 
     }
   };
 
   return (
-    // <div>
-    //   <h2>Available Products</h2>
-    //   <div>
-    //     {products.map((product) => (
-    //       <ManageStores
-    //         key={product.id}
-    //         id={product.id}
-    //         name={product.name}
-    //         price={product.price}
-    //       />
-    //     ))}
-    //   </div>
-    //   <Link to="/layout/orders">
-    //     <button className="bg-orange-400 rounded py-2 px-2 hover:bg-orange-500 my-3">View your Cart</button>
-    //   </Link>
-      
-    // </div>
-
     <>
     <header className="bg-white h-[140px] rounded-lg py-2 px-2">
       <h1 className="h-[30px] font-medium text-[20px] leading-[30px] text-[#383E49] w-[163px]">Overall Inventory</h1>
@@ -119,9 +129,13 @@ const Inventory = () => {
         open={openDialog}
         onClose={handleCloseDialog}
         onSubmit={handleSubmit}
-        title="Add Product"
+        title="New Product"
         fields={productFields}
+        cancelButton="Discard"
+        submitButton="Add Product"
       />
+
+      <InventoryTable/>
     </main>
     </>
   );
