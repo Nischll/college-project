@@ -164,6 +164,70 @@ app.post('/products', upload.single('image'), async (req, res) => {
   }
 });
 
+// API to fetch product data from the database
+app.get('/getProducts', async (req, res) => {
+  let connection;
+
+  try {
+    connection = await oracledb.getConnection(dbConfig);
+
+    // Query to fetch all data from the Products table
+    const result = await connection.execute(
+      `SELECT product_name, category, buying_price, quantity, unit, 
+              TO_CHAR(expiry_date, 'YYYY-MM-DD') AS expiry_date
+       FROM Products`,
+      [],
+      { outFormat: oracledb.OUT_FORMAT_OBJECT } // Return rows as objects
+    );
+
+    res.status(200).send(result.rows); // Send the data to the client
+  } catch (err) {
+    console.error('Error fetching products:', err);
+    res.status(500).send({ error: 'Failed to fetchproducts' });
+  } finally {
+    if (connection) {
+      await connection.close();
+    }
+  }
+});
+
+// TOTAL NUMBER OF CATEOGORY FROM PRODUCT
+app.get('/product/category/count', async (req, res) => {
+  let connection;
+
+  try {
+    connection = await oracledb.getConnection(dbConfig);
+
+    // Query to fetch the count of distinct categories from the Products table
+    const result = await connection.execute(
+      `SELECT COUNT(DISTINCT category) AS no_of_category FROM products`
+    );
+
+    // Log the full result to check its structure
+    // console.log("Full Query Result:", result);
+
+    // Check if rows are returned and the expected result is in place
+    if (result.rows && result.rows.length > 0) {
+      // Access the count value directly from result.rows[0][0]
+      const categoryCount = result.rows[0][0];  // Access the first row, first column
+
+      // Send the category count in the response
+      res.json({ no_of_category: categoryCount });
+    } else {
+      res.status(404).json({ error: 'No data found' });
+    }
+  } catch (error) {
+    console.error("Error fetching category count:", error);
+    res.status(500).json({ error: 'Failed to fetch category count' });
+  } finally {
+    if (connection) {
+      await connection.close();
+    }
+  }
+});
+
+
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
