@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GenericFormDialog from "../extraComponents/GenericFormDialogue.tsx";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import InventoryTable from "./InventoryTable.tsx";
 
 const Inventory = () => {
 
   const [openDialog, setOpenDialog] = useState(false);
+  // const [totalCategories, setTotalCategories] = useState(null);
 
   const productFields = [
     // { id: "image", label: "Image", type: "file",InputLabelProps: { shrink: true }, required: false },
@@ -66,6 +67,31 @@ const Inventory = () => {
     }
   };
 
+  // useEffect(() => {
+  //   const fetchCategoryCount = async () => {
+  //     try {
+  //       const response = await axios.get('http://localhost:3000/product/category/count');
+  //       setTotalCategories(response.data.no_of_category);
+  //       // console.log("Updated State:", response.data.no_of_category);
+  //     } catch (error) {
+  //       console.error("Error fetching category count", error);
+  //     }
+  //   };
+  //   fetchCategoryCount();
+  // }, []);
+  
+  const fetchCategoryCount = async () => {
+    const response = await axios.get('http://localhost:3000/product/category/count');
+    return response.data.no_of_category;
+  };
+
+  const { data: totalCategories} = useQuery({
+    queryKey: ['categoryCount'],
+    queryFn: fetchCategoryCount,
+  });
+  
+  
+
   return (
     <>
     <header className="bg-white h-[140px] rounded-lg py-2 px-2">
@@ -73,7 +99,7 @@ const Inventory = () => {
       <div className="grid grid-cols-10 mt-2 h-[85px]">
         <section className="col-span-1 flex flex-col gap-[12px] h-fit">
           <h1 className="font-semibold h-[22px] text-[16px] text-[#1570EF] leading-[24px]">Categories</h1>
-          <span className="h-[16px] leading-[20px] font-semibold text-[16px] text-[#5D6679]">14</span>
+          <span className="h-[16px] leading-[20px] font-semibold text-[16px] text-[#5D6679]">{totalCategories}</span>
           <span className="h-[16px] font-normal text-[14px] leading-5 text-[#858D9D]">Last 7 days</span>
         </section>
         <section className="col-start-3 col-end-5 flex flex-col gap-[12px] h-fit">
@@ -120,8 +146,8 @@ const Inventory = () => {
 
     <main className="bg-white h-fit rounded-lg py-2 px-2 mt-3">
       <header className="flex justify-between items-center h-[40px]">
-        <h1 className="w-[86px] h-[28px] font-normal text-[20px] leading-[26px] text-[#383E49]">Products</h1>
-        <button onClick={handleOpenDialog} className="flex justify-center h-[35px] w-[116px] py-[7px] px-[12px] bg-[#1366D9] rounded font-normal h-[20px] text-[16px] leading-[20px] text-white">Add Product</button>
+        <h1 className="w-[86px] h-[28px] font-semibold text-[22px] leading-[26px] text-[#383E49]">Products</h1>
+        <button onClick={handleOpenDialog} className="flex justify-center h-[35px] w-[116px] py-[7px] px-[12px] bg-[#1366D9] rounded font-normal h-[20px] text-[16px] leading-[20px] text-white hover:bg-[#1e1dc5] active:bg-[#2d1283]">Add Product</button>
       </header>
 
       {/* Generic Form Dialog for Adding Product */}
