@@ -35,7 +35,7 @@ const Sidebar = ({}) => {
     items.filter(item => item.visible !== false) 
       .map(item => (
         <NavLink to={item.path} key={item.name} className={navLinkStyle}>
-          <li className="flex items-center gap-[12px] h-[55px]">
+          <li className="flex items-center gap-[12px]  h-[55px] hover:border-2 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-300 rounded-md">
             <img src={`src/images/${item.icon}`} alt={item.name} className="h-[26px]" />
             <h1 className="font-semibold text-[17px] leading-7 h-[30px]">{item.name}</h1>
           </li>
@@ -47,7 +47,7 @@ const Sidebar = ({}) => {
       <ul className="flex flex-col gap-[12px] px-4">
         {renderSidebar(footerItems)}
 
-        <li onClick={handleLogout} className="flex items-center gap-[12px] h-[55px] cursor-pointer text-[#7A7A7A] hover:text-blue-500">
+        <li onClick={handleLogout} className="flex items-center gap-[12px] h-[55px] cursor-pointer text-[#7A7A7A] hover:border hover:shadow-inner hover:shadow-slate-300 hover:text-red-400">
           <img src="src/images/logout.png" alt="Log Out" className="h-[26px]" />
           <h1 className="font-semibold text-[17px] leading-7 h-[30px]">Log Out</h1>
         </li>

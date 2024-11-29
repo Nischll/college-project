@@ -84,12 +84,36 @@ const Inventory = () => {
     const response = await axios.get('http://localhost:3000/product/category/count');
     return response.data.no_of_category;
   };
+  const fetchTotalProduct = async () => {
+    const response = await axios.get('http://localhost:3000/product/count');
+    return response.data.no_of_product;
+  };
+  const fetchTotalProductAmount = async () => {
+    const response = await axios.get('http://localhost:3000/product/amount');
+    return response.data.total_product_amount;
+  };
+  const fetchTotalLowStocks = async () => {
+    const response = await axios.get('http://localhost:3000/product/stocks/low');
+    return response.data.total_low_stocks;
+  };
+
 
   const { data: totalCategories} = useQuery({
     queryKey: ['categoryCount'],
     queryFn: fetchCategoryCount,
   });
-  
+  const { data: totalProducts} = useQuery({
+    queryKey: ['productCount'],
+    queryFn: fetchTotalProduct,
+  });
+  const { data: totalProductsAmount} = useQuery({
+    queryKey: ['productAmount'],
+    queryFn: fetchTotalProductAmount,
+  });
+  const { data: totalLowStocks} = useQuery({
+    queryKey: ['lowStocks'],
+    queryFn: fetchTotalLowStocks,
+  });
   
 
   return (
@@ -106,8 +130,8 @@ const Inventory = () => {
           <h1 className="font-semibold h-[22px] text-[16px] text-[#E19133] leading-[24px]">Total Products</h1>
           <div className=" flex flex-col h-[56px] gap-[12px]">
             <div className="flex justify-between">
-              <span className="h-[16px] leading-[20px] font-semibold text-[16px] text-[#5D6679]">868</span>
-              <span className="h-[16px] leading-[20px] font-semibold text-[16px] text-[#5D6679]">&#8377;25000</span>
+              <span className="h-[16px] leading-[20px] font-semibold text-[16px] text-[#5D6679]">{totalProducts}</span>
+              <span className="h-[16px] leading-[20px] font-semibold text-[16px] text-[#5D6679]">&#8377;{totalProductsAmount}</span>
             </div>
             <div className="flex justify-between">
               <span className="h-[16px] font-normal text-[14px] leading-5 text-[#858D9D]">Last 7 days</span>
@@ -132,12 +156,12 @@ const Inventory = () => {
           <h1 className="font-semibold h-[22px] text-[16px] text-[#F36960] leading-[24px]">Low Stocks</h1>
           <div className=" flex flex-col h-[56px] gap-[12px]">
             <div className="flex justify-between">
-              <span className="h-[16px] leading-[20px] font-semibold text-[16px] text-[#5D6679]">12</span>
-              <span className="h-[16px] leading-[20px] font-semibold text-[16px] text-[#5D6679]">2</span>
+              <span className="h-[16px] leading-[20px] font-semibold text-[16px] text-[#5D6679]">{totalLowStocks}</span>
+              {/* <span className="h-[16px] leading-[20px] font-semibold text-[16px] text-[#5D6679]"></span> */}
             </div>
             <div className="flex justify-between">
-              <span className="h-[16px] font-normal text-[14px] leading-5 text-[#858D9D]">Ordered</span>
-              <span className="h-[16px] font-normal text-[14px] leading-5 text-[#858D9D]">Not in stock</span>
+              <span className="h-[16px] font-normal text-[14px] leading-5 text-[#858D9D]">Quantity less than 10</span>
+              {/* <span className="h-[16px] font-normal text-[14px] leading-5 text-[#858D9D]">Not in stock</span> */}
             </div>
           </div>
         </section>
