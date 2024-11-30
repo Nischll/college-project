@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import {Link, useNavigate} from 'react-router-dom';
-import { useAuth } from '../Layouts/AuthContext';
+import { useAuth } from '../useContext/AuthContext';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { baseSchema } from '../extraComponents/Schemas';
 import { toast } from 'react-toastify';

@@ -2,12 +2,13 @@ import { lazy, Suspense } from 'react';
 import {RouterProvider, createBrowserRouter} from 'react-router-dom';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import Hero from './assets/components/Layouts/Hero';
-import { AuthProvider } from "./assets/components/Layouts/AuthContext";
+import { AuthProvider } from "./assets/components/useContext/AuthContext";
 import { Provider } from 'react-redux';
 import store from './assets/components/Redux/Store';
 import ProtectedRoute from './assets/components/extraComponents/ProtectedRoute';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import { SidebarProvider } from './assets/components/useContext/SidebarContext';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
   const Client = new QueryClient();
   return (
     <>
+    <SidebarProvider>
     <ToastContainer/>
     <QueryClientProvider client={Client}>
     <Provider store={store}>
@@ -115,6 +117,7 @@ function App() {
     </AuthProvider>
     </Provider>
     </QueryClientProvider>
+    </SidebarProvider>
     </>
   )
 }
