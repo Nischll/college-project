@@ -55,6 +55,7 @@ const InventoryTable = () => {
     <GenericProductTable
     columns={columns}
     getData={fetchProductTable}
+    pageSize={5}
     />
     </>
   );

@@ -16,7 +16,7 @@ const Layout = () => {
 
         {/* Main Content */}
         <main
-          className={`overflow-hidden py-3 px-3 h-full bg-gray-200 ${sidebarOpen ? "col-span-9" : "col-span-10 ml-[-35px]"}`}>
+          className={`overflow-hidden py-3 px-3 h-[calc(100%-25px)] bg-gray-200 ${sidebarOpen ? "col-span-9" : "col-span-10 ml-[-35px]"}`}>
           <Outlet />
         </main>
       </div>
