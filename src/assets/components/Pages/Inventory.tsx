@@ -120,7 +120,7 @@ const Inventory = () => {
     <>
     <header className="bg-white h-[140px] rounded-lg py-2 px-2">
       <h1 className="h-[30px] font-medium text-[20px] leading-[30px] text-[#383E49] w-[163px]">Overall Inventory</h1>
-      <div className="grid grid-cols-10 mt-2 h-[85px]">
+      <div className="grid grid-cols-9 mt-2 h-[85px]">
         <section className="col-span-1 flex flex-col gap-[12px] h-fit">
           <h1 className="font-semibold h-[22px] text-[16px] text-[#1570EF] leading-[24px]">Categories</h1>
           <span className="h-[16px] leading-[20px] font-semibold text-[16px] text-[#5D6679]">{totalCategories}</span>
@@ -152,7 +152,7 @@ const Inventory = () => {
             </div>
           </div>
         </section>
-        <section className="col-start-9 col-end-11 flex flex-col gap-[12px]">
+        <section className="col-start-9 col-end-10 flex flex-col gap-[12px]">
           <h1 className="font-semibold h-[22px] text-[16px] text-[#F36960] leading-[24px]">Low Stocks</h1>
           <div className=" flex flex-col h-[56px] gap-[12px]">
             <div className="flex justify-between">
