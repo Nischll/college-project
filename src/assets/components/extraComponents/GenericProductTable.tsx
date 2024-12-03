@@ -38,7 +38,7 @@ const GenericProductTable = ({getData, columns, pageSize}) => {
 
   return (  
     <>
-    <div className="flex flex-col h-[calc(100vh-305px)]">
+    <div className="flex flex-col h-[calc(100vh-296px)]">
       <main className="mt-2 relative flex flex-wrap justify-center w-full h-full overflow-y-scroll">
         <table className='relative w-full h-fit'>
           <thead>
@@ -62,7 +62,7 @@ const GenericProductTable = ({getData, columns, pageSize}) => {
                           value={header.column.getFilterValue() ?? ''}
                           onChange={e => header.column.setFilterValue(e.target.value)}
                           placeholder='search here'
-                          className='h-[20px] border border-slate-400 font-normal text-[13px] rounded-md placeholder:text-sm placeholder:font-normal placeholder:text-left text-left w-[110px] px-[3px] focus:outline-none focus:border-gray-700 '
+                          className='h-[22px] w-[110px] border border-slate-400 font-medium text-[13px] rounded-md placeholder:text-sm placeholder:font-normal placeholder:text-left text-left px-[3px] focus:outline-none focus:border-gray-800 '
                         />
                       </div>
                     )}
@@ -81,7 +81,7 @@ const GenericProductTable = ({getData, columns, pageSize}) => {
               table.getRowModel().rows.map(row => (
                 <tr key={row.id} className="border-b-[0.5px] border-[#D0D3D9] bg-white">
                   {row.getVisibleCells().map(cell => (
-                    <td key={cell.id} className="font-normal text-[15px] text-gray-700 text-left px-[15px] py-[12px]">
+                    <td key={cell.id} className="font-medium text-[15px] text-gray-700 text-left px-[15px] py-[12px]">
                       {flexRender(
                       cell.column.columnDef.cell, 
                       cell.getContext()
@@ -103,7 +103,7 @@ const GenericProductTable = ({getData, columns, pageSize}) => {
               table.setPageIndex(0);
               setPageIndex(0);
             }}
-            className='flex items-center text-[#48505E] text-[15px] font-normal bg-white px-2 py-[3px] hover:bg-slate-200 active:bg-slate-300 border border-gray-400 rounded-md'>
+            className='flex items-center text-[#48505E] text-[15px] font-medium bg-white px-2 py-[3px] hover:bg-slate-200 active:bg-slate-300 border border-gray-400 rounded-md'>
             First Page
           </button>
           <button
@@ -112,11 +112,11 @@ const GenericProductTable = ({getData, columns, pageSize}) => {
               table.previousPage();
             }}
             disabled={!table.getCanPreviousPage()}
-            className='flex item-center cursor-pointer text-[#48505E] bg-white px-2 py-[3px] hover:bg-slate-200 active:bg-slate-300 border border-gray-400 rounded-lg'>
+            className='flex item-center cursor-pointer font-medium text-[#48505E] bg-white px-2 hover:bg-slate-200 active:bg-slate-300 border border-gray-400 rounded-lg'>
             &lt;
           </button>
         </div>
-        <span className="py-2 text-[15px] text-[#48505E] font-normal">Page {pageIndex + 1} of {Math.ceil(totalItems / pageSize)}</span>
+        <span className="py-2 text-[15px] text-[#48505E] font-medium">Page {pageIndex + 1} of {Math.ceil(totalItems / pageSize)}</span>
         <div className='flex justify-center item-center py-2 gap-2'>
           <button
             onClick={() => {
@@ -124,7 +124,7 @@ const GenericProductTable = ({getData, columns, pageSize}) => {
               table.nextPage();
             }}
             disabled={!table.getCanNextPage()}
-            className='flex item-center cursor-pointer text-[#48505E] bg-white px-2 py-[3px] hover:bg-slate-200 active:bg-slate-300 border border-gray-400 rounded-lg'>
+            className='flex item-center cursor-pointer font-medium text-[#48505E] bg-white px-2 hover:bg-slate-200 active:bg-slate-300 border border-gray-400 rounded-lg'>
             &gt;
           </button>
           <button
@@ -132,7 +132,7 @@ const GenericProductTable = ({getData, columns, pageSize}) => {
               table.setPageIndex(table.getPageCount() - 1);
               setPageIndex(table.getPageCount() - 1);
             }}
-            className='flex items-center text-[#48505E] text-[15px] font-normal bg-white px-2 py-[3px] hover:bg-slate-200 active:bg-slate-300 border border-gray-400 rounded-md'>
+            className='flex items-center text-[#48505E] text-[15px] font-medium bg-white px-2 py-[3px] hover:bg-slate-200 active:bg-slate-300 border border-gray-400 rounded-md'>
             Last Page
           </button>
         </div>

@@ -25,15 +25,15 @@ const Sidebar = () => {
 
   const navLinkStyle = ({ isActive }) =>
     isActive
-      ? "text-[#1366D9] font-semibold border border-blue-100 shadow-md shadow-blue-300 rounded-md"
-      : "text-[#7A7A7A] hover:text-blue-500";
+      ? "text-[#1366D9] font-semibold border border-blue-100 shadow-md shadow-blue-300 rounded-md px-2 "
+      : "text-[#7A7A7A] hover:text-blue-500 hover:px-2 hover:border-2 hover:border-blue-100 hover:shadow-md hover:shadow-blue-300 active:px-2 active:shadow-inner active:shadow-blue-300 rounded-md";
 
   const renderSidebar = (items) =>
     items
       .filter((item) => item.visible !== false)
       .map((item) => (
         <NavLink to={item.path} key={item.name} className={navLinkStyle}>
-          <li className="flex items-center gap-[12px] h-[55px] hover:border-2 hover:border-blue-100 hover:shadow-md hover:shadow-blue-300 active:shadow-inner active:shadow-blue-300 rounded-md">
+          <li className={"flex items-center gap-[12px] h-[55px]"}>
             <img src={`src/images/${item.icon}`} alt={item.name} className={` ${sidebarOpen ? 'h-[26px]' : 'h-[30px]'}`} />
             <h1
               className={`font-semibold text-[17px] leading-7 h-[30px] ${
@@ -66,7 +66,7 @@ const Sidebar = () => {
       <ul className="flex flex-col gap-[12px] px-4">{renderSidebar(footerItems)}
         <li
           onClick={handleLogout}
-          className="flex items-center gap-[12px] h-[55px] cursor-pointer text-[#7A7A7A] hover:border hover:border-red-200 hover:shadow-md hover:shadow-red-300 active:shadow-inner active:shadow-red-300 rounded-md"
+          className="flex items-center gap-[12px] h-[55px] cursor-pointer text-[#7A7A7A] hover:px-2 hover:border hover:border-red-200 hover:shadow-md hover:shadow-red-300 active:shadow-inner active:shadow-red-300 rounded-md"
         >
           <img src="src/images/logout.png" alt="Log Out" className={` ${sidebarOpen ? 'h-[26px]' : 'h-[30px]'}`} />
           <h1

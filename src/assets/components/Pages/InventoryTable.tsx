@@ -38,7 +38,7 @@ const InventoryTable = () => {
       enableColumnFilter: false
     },
     {
-      accessorKey: 'QUANTITY',
+      accessorKey: 'UNIT',
       header: 'Quantity',
       cell: ({ row }) => {
         const quantity = row.original.QUANTITY;
@@ -51,6 +51,22 @@ const InventoryTable = () => {
       accessorKey: 'EXPIRY_DATE',
       header: 'Expiry Date',
       enableColumnFilter: false
+    },
+    {
+      accessorKey: 'QUANTITY',
+      header: 'Availability',
+      cell: ({ getValue }) => {
+        const value = getValue();
+        // return !value ? <span>Out of Stock</span> : <span className="text-[#10A760]">In Stock</span>
+        if(value === 0){
+          return <span className="text-[#DA3E33]">Out of stock</span>;
+        }else if(value < 10){
+          return <span className="text-[#E19133]">Low stock</span>;
+        }else{
+          return <span className="text-[#10A760]">In stock</span>;
+        }
+      },
+      enableColumnFilter: false,
     }
   ];
 
@@ -59,7 +75,7 @@ const InventoryTable = () => {
     <GenericProductTable
     columns={columns}
     getData={fetchProductTable}
-    pageSize={9}
+    pageSize={8}
     />
     </>
   );
