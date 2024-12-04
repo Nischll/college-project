@@ -70,9 +70,9 @@ function Login (){
             {errors.password && <span className="h-[15px] text-[12px] font-normal text-red-600 px-[10px] mt-[-3px]"> {errors.password.message}</span>}
           </section>
           <footer className="flex flex-col items-center h-[78px] gap-[8px] my-[30px]">
-            <button type="submit" className="h-[35px] w-full bg-customBlue rounded border border-customBlue font-poppins text-white text-[16px] leading-8 font-medium">Login</button>
+            <button type="submit" className="h-[35px] w-full bg-customBlue rounded border border-customBlue font-poppins text-white text-[16px] leading-8 font-medium hover:bg-blue-700 active:bg-blue-800">Login</button>
           <Link to="/signup" className='w-full'>
-            <button className="h-[35px] w-full bg-white rounded border border-[#2159AB] font-poppins text-[16px] text-[#2159AB] leading-8 font-medium">Sign up</button>
+            <button className="h-[35px] w-full bg-white rounded border border-[#2159AB] font-poppins text-[16px] text-[#2159AB] leading-8 font-medium hover:bg-gray-100 active:bg-gray-200">Sign up</button>
           </Link>
         </footer>
         </form>
@@ -80,7 +80,7 @@ function Login (){
       <footer className="flex items-center justify-center h-[20px] text-[14px] gap-[3px]">
         <p className="text-[#292929] font-poppins">Already have an account?</p>
         <Link to="/signup">
-          <span className="text-[#1366D9] font-poppins">Sign up</span>
+          <span className="text-[#1366D9] font-poppins hover:underline hover:underline-offset-4">Sign up</span>
         </Link>
       </footer>
     </main>

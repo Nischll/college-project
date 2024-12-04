@@ -74,14 +74,14 @@ function Signup() {
             {errors.password && <span className="h-[15px] text-[12px] font-normal text-red-600 px-[10px] mt-[-2px]">{errors.password.message}</span>}
           </section>
           <footer className="flex items-center h-[35px] mt-4">
-            <button type="submit" className="h-[35px] w-full bg-white rounded border border-[#2159AB] font-poppins text-[16px] text-[#2159AB] leading-8 font-medium">Sign up</button>
+            <button type="submit" className="h-[35px] w-full bg-white rounded border border-[#2159AB] font-poppins text-[16px] text-[#2159AB] leading-8 font-medium hover:bg-gray-100 active:bg-gray-200">Sign up</button>
           </footer>
         </form>
       </div>
       <footer className="flex items-center justify-center h-[20px] text-[14px] gap-[3px] mt-8">
         <p className="text-[#292929] font-poppins">Already have an account?</p>
         <Link to="/">
-          <span className="text-[#1366D9] font-poppins">Login in</span>
+          <span className="text-[#1366D9] font-poppins hover:underline hover:underline-offset-4">Login in</span>
         </Link>
 
          {/* Confirm Dialog Component */}

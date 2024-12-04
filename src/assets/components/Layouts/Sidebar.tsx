@@ -52,7 +52,7 @@ const Sidebar = () => {
       <ul className="flex flex-col gap-[12px] px-3">
         {/* Hamburger Button */}
         <li className="h-fit w-fit mb-[-6px]">
-          <button onClick={toggleSidebar} className={`px-[3px] py-[5px] text-white w-full flex items-center justify-start rounded hover:bg-gray-200 active:bg-gray-400 focus:outline-none ${sidebarOpen ? 'bg-white' : 'bg-gray-300'}`}>
+          <button onClick={toggleSidebar} className={`px-[3px] py-[5px] text-white w-full flex items-center justify-start rounded hover:bg-gray-200 active:bg-gray-300 focus:outline-none ${sidebarOpen ? 'bg-white' : 'bg-gray-200'}`}>
             <div className="space-y-[4px]">
               <div className="w-[30px] h-[4px] bg-gray-400 rounded"></div>
               <div className="w-[30px] h-[4px] bg-gray-400 rounded"></div>

@@ -1,4 +1,4 @@
-import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table";
+import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 
 
@@ -6,6 +6,8 @@ const GenericProductTable = ({getData, columns, pageSize}) => {
   const [data, setData] = useState([]);
   const [pageIndex, setPageIndex] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
+  const [columnFilters, setColumnFilters] = useState([]);
+  const [sorting, setSorting] = useState([]);
 
   useEffect(() => {
     async function dataFetch() {
@@ -28,12 +30,17 @@ const GenericProductTable = ({getData, columns, pageSize}) => {
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     state: {
+      sorting,
+      columnFilters,
       pagination: {
         pageIndex,
         pageSize: pageSize,
       },
-    }
+    },
+    onColumnFiltersChange: setColumnFilters,
+    onSortingChange: setSorting,
   });
 
   return (  
@@ -47,11 +54,19 @@ const GenericProductTable = ({getData, columns, pageSize}) => {
                 {headerGroup.headers.map(header => (
                   <th key={header.id} className='text-[17px] leading-[20px] text-gray-800 text-left font-medium h-[35px] bg-slate-200 px-[15px] py-[12px] bg-white'>
                     <div className="flex gap-2">
-                    <div className='cursor-pointer'>
+                    <div onClick={header.column.getToggleSortingHandler()} className='cursor-pointer'>
                       {flexRender(
                       header.column.columnDef.header, 
                       header.getContext()
                       )}
+                      {
+                        !header.column.getIsSorted()
+                          ? '↕'  // Default "unsorted" symbol (horizontal arrows)
+                          : ({
+                              asc: '⬆',  // Upwards arrow for ascending
+                              desc: '⬇'  // Downwards arrow for descending
+                            })[header.column.getIsSorted() as 'asc' | 'desc']
+                      }
                     </div>
 
                       {/* FITER */}

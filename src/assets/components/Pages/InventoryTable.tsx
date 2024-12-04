@@ -67,6 +67,7 @@ const InventoryTable = () => {
         }
       },
       enableColumnFilter: false,
+      enableSorting: false,
     }
   ];
 
