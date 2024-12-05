@@ -27,10 +27,14 @@ const UserTable = () => {
     {
       accessorKey: 'ROLE',
       header: 'Role',
-      // cell: ({ getValue }) => {
-      //   const value = getValue();
-      //   return !value ? <span className="text-red-600">No Value</span> : <span>{value}</span>;
-      // },
+      cell: ({ getValue }) => {
+        const value = getValue();
+        if(value === 'admin'){
+          return <span className="text-[#DA3E33]">{value}</span>;
+        }else{
+          return <span className="text-[#10A760]">{value}</span>;
+        }
+      },
     },
     {
       header: 'Actions',
