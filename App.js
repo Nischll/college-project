@@ -60,6 +60,37 @@ app.post('/signup', async (req, res) => {
   }
 });
 
+app.get('/signup/get/details', async (req, res) => {
+  let connection;
+
+  try {
+    connection = await oracledb.getConnection(dbConfig);
+
+    // Query to fetch all users from the signup_details table
+    const result = await connection.execute(
+      `SELECT email, name, password, role FROM signup_details`,
+      [], // No parameters needed in the query
+      { outFormat: oracledb.OUT_FORMAT_OBJECT }  // To get results as objects
+    );
+
+    // If no users found, send an appropriate message
+    // if (result.rows.length === 0) {
+    //   return res.status(404).send({ message: 'No users found' });
+    // }
+
+    // Respond with the fetched data
+    res.status(200).send(result.rows);
+  } catch (err) {
+    console.error('Error executing query:', err);
+    res.status(500).send({ error: 'Failed to retrieve users' });
+  } finally {
+    if (connection) {
+      await connection.close();
+    }
+  }
+});
+
+
 // Login API
 app.post('/login', async (req, res) => {
 
@@ -174,7 +205,7 @@ app.get('/getProducts', async (req, res) => {
     // Query to fetch all data from the Products table
     const result = await connection.execute(
       `SELECT product_name, category, buying_price, quantity, unit, 
-              TO_CHAR(expiry_date, 'YYYY-MM-DD') AS expiry_date
+              TO_CHAR(expiry_date, 'YYYY/MM/DD') AS expiry_date
        FROM Products`,
       [],
       { outFormat: oracledb.OUT_FORMAT_OBJECT } // Return rows as objects
