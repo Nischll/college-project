@@ -11,7 +11,7 @@ const Sidebar = () => {
     { name: "Dashboard", path: "dashboard", icon: "home.png", visible: user?.role === "admin" },
     { name: "Inventory", path: "inventory", icon: "cart.png", visible: true },
     { name: "Reports", path: "reports", icon: "board.png", visible: user.role === "admin" },
-    { name: "Suppliers", path: "/", icon: "suppliers.png", visible: true },
+    { name: "Manage Staff", path: "manage_staff", icon: "suppliers.png", visible: user.role === "admin"  },
     { name: "Orders", path: "orders", icon: "order.png", visible: true },
   ];
 

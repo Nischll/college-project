@@ -1,5 +1,5 @@
 import axios from "axios";
-import GenericProductTable from "../extraComponents/GenericProductTable";
+import GenericTable from "../extraComponents/GenericTable";
 
 const InventoryTable = () => {
 
@@ -45,7 +45,12 @@ const InventoryTable = () => {
         const unit = row.original.UNIT;
         return `${quantity} ${unit}s`;
       },
-      enableColumnFilter: false
+      enableColumnFilter: false,  
+      sortingFn: (rowA, rowB) => {
+        const valueA = `${rowA.original.QUANTITY}`;
+        const valueB = `${rowB.original.QUANTITY}`;
+        return valueA.localeCompare(valueB, undefined, { numeric: true });
+      },
     },
     {
       accessorKey: 'EXPIRY_DATE',
@@ -73,11 +78,13 @@ const InventoryTable = () => {
 
   return (
     <>
-    <GenericProductTable
-    columns={columns}
-    getData={fetchProductTable}
-    pageSize={8}
-    />
+    <div className="flex flex-col h-[calc(100vh-296px)]">
+      <GenericTable
+      columns={columns}
+      getData={fetchProductTable}
+      pageSize={8}
+      />
+    </div>
     </>
   );
 }

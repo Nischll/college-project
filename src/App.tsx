@@ -19,7 +19,7 @@ function App() {
   const Inventory = lazy(() => import ("./assets/components/Pages/Inventory"));
   const Reports = lazy(() => import ("./assets/components/Pages/Reports"));
   const Orders = lazy(() => import ("./assets/components/Pages/Orders"));
-  // const ManageStores = lazy(() => import ("./assets/components/Pages/ManageStores"));
+  const ManageStaff = lazy(() => import ("./assets/components/Pages/ManageStaff/ManageStaff"));
   const Settings = lazy(() => import ("./assets/components/Pages/Settings"));
   // const ProductList = lazy(() => import ("./assets/components/Redux/ProductList"));
 
@@ -103,6 +103,15 @@ function App() {
                 </ProtectedRoute>
               )
             },
+            
+            {
+              path:"manage_staff",
+              element:(
+                <ProtectedRoute allowedRoles={["admin", "user"]}>
+                  <ManageStaff/>
+                </ProtectedRoute>
+              )
+            }
             // {
             //   path:"managestores",
             //   element:<ManageStores/>

@@ -2,7 +2,7 @@ import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel
 import { useEffect, useState } from "react";
 
 
-const GenericProductTable = ({getData, columns, pageSize}) => {
+const GenericTable = ({getData, columns, pageSize}) => {
   const [data, setData] = useState([]);
   const [pageIndex, setPageIndex] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
@@ -13,7 +13,7 @@ const GenericProductTable = ({getData, columns, pageSize}) => {
     async function dataFetch() {
       try{
       const fetchData = await getData();
-      // console.log(fetchData)
+      // console.log(fetchData);
       setData(fetchData);
       setTotalItems(fetchData.length);
       }
@@ -22,7 +22,7 @@ const GenericProductTable = ({getData, columns, pageSize}) => {
       }
     }
     dataFetch();
-  }, [data]);
+  }, []);
 
   const table = useReactTable({
     columns,
@@ -45,7 +45,6 @@ const GenericProductTable = ({getData, columns, pageSize}) => {
 
   return (  
     <>
-    <div className="flex flex-col h-[calc(100vh-296px)]">
       <main className="mt-2 relative flex flex-wrap justify-center w-full h-full overflow-y-scroll">
         <table className='relative w-full h-fit'>
           <thead>
@@ -59,14 +58,10 @@ const GenericProductTable = ({getData, columns, pageSize}) => {
                       header.column.columnDef.header, 
                       header.getContext()
                       )}
-                      {
-                        !header.column.getIsSorted()
-                          ? '↕'  // Default "unsorted" symbol (horizontal arrows)
-                          : ({
-                              asc: '⬆',  // Upwards arrow for ascending
-                              desc: '⬇'  // Downwards arrow for descending
-                            })[header.column.getIsSorted() as 'asc' | 'desc']
-                      }
+                      {header.column.getIsSorted() && { asc: '🔼', desc: '🔽' }[
+                      header.column.getIsSorted() as 'asc' | 'desc'
+                      ]}
+                      
                     </div>
 
                       {/* FITER */}
@@ -152,9 +147,8 @@ const GenericProductTable = ({getData, columns, pageSize}) => {
           </button>
         </div>
       </footer>
-    </div>
     </>
   );
 }
  
-export default GenericProductTable;
+export default GenericTable;
