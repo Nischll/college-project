@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import {Link, useNavigate} from 'react-router-dom';
 import { useAuth } from '../useContext/AuthContext';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { baseSchema } from '../extraComponents/Schemas';
+import { baseSchema } from '../GenericComponents/Schemas';
 import { toast } from 'react-toastify';
 
 function Login (){
@@ -59,9 +59,9 @@ function Login (){
         </header>
         <form onSubmit={handleSubmit(submit)} className="h-[250px] flex flex-col gap-[6px]">
           <section className="flex flex-col h-[70px] font-poppins">
-            <label htmlFor="email" className="h-[21px] font-semibold text-[18px] text-[#525252]">Email</label>
-            <input type="text" id="email" placeholder="enter your email" {...register('email')} className="h-[45px] py-[6px] px-[10px] rounded text-[14px] leading-5 font-normal mt-[6px] border border-[#CCCCCC] placeholder:text-[#CCCCCC] focus:outline-none focus:ring-1 focus:ring-blue-500"/>
-            {errors.email && <span className="h-[15px] text-[12px] font-normal text-red-600 px-[10px] mt-[-2px]">{errors.email.message}</span>}
+            <label htmlFor="username" className="h-[21px] font-semibold text-[18px] text-[#525252]">Username</label>
+            <input type="text" id="username" placeholder="enter your username" {...register('username')} className="h-[45px] py-[6px] px-[10px] rounded text-[14px] leading-5 font-normal mt-[6px] border border-[#CCCCCC] placeholder:text-[#CCCCCC] focus:outline-none focus:ring-1 focus:ring-blue-500"/>
+            {errors.username && <span className="h-[15px] text-[12px] font-normal text-red-600 px-[10px] mt-[-2px]">{errors.username.message}</span>}
           </section>
 
           <section className="flex flex-col h-[70px] font-poppins">

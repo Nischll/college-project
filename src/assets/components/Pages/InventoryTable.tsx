@@ -1,5 +1,5 @@
 import axios from "axios";
-import GenericTable from "../extraComponents/GenericTable";
+import GenericTable from "../GenericComponents/GenericTable";
 
 const InventoryTable = () => {
 

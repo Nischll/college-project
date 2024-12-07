@@ -5,7 +5,7 @@ import Hero from './assets/components/Layouts/Hero';
 import { AuthProvider } from "./assets/components/useContext/AuthContext";
 import { Provider } from 'react-redux';
 import store from './assets/components/Redux/Store';
-import ProtectedRoute from './assets/components/extraComponents/ProtectedRoute';
+import ProtectedRoute from './assets/components/GenericComponents/ProtectedRoute';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import { SidebarProvider } from './assets/components/useContext/SidebarContext';

@@ -1,13 +1,15 @@
 import { z } from 'zod'
 
 const nameRegex = /^[A-Z][a-z]{2,29}(?: [A-Z][a-z]{2,29})(?: [A-Z][a-z]{2,29})?$/
-const emailRegex = /^[a-zA-Z0-9_]+@ims\.np$/;
+// const emailRegex = /^[a-zA-Z0-9_]+@ims\.np$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/
 ;
 export const baseSchema = z.object({
-  email: z
+  username: z
   .string()
-  .regex(emailRegex, {message:"email must end with '@ims.np'"}),
+  .min(6, "username must be at least 6 characters")
+  .max(20, "uername must be less than 20 characters"),
+  // .regex(emailRegex, {message:"email must end with '@ims.np'"}),
 
   password: z
   .string()

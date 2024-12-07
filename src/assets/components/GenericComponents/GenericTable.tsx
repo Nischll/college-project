@@ -2,7 +2,7 @@ import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel
 import { useEffect, useState } from "react";
 
 
-const GenericTable = ({getData, columns, pageSize}) => {
+const GenericTable = ({getData, columns, pageSize, enablePagination = true}) => {
   const [data, setData] = useState([]);
   const [pageIndex, setPageIndex] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
@@ -106,7 +106,8 @@ const GenericTable = ({getData, columns, pageSize}) => {
       </main>
 
       {/* PAGINATION */}
-      <footer className='flex flex-wrap justify-between items-center mt-2'>
+      {enablePagination && (
+        <footer className='flex flex-wrap justify-between items-center mt-2'>
         <div className='flex justify-center item-center py-2 gap-2'>
           <button
             onClick={() => {
@@ -147,6 +148,7 @@ const GenericTable = ({getData, columns, pageSize}) => {
           </button>
         </div>
       </footer>
+      )}
     </>
   );
 }

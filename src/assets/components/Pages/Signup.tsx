@@ -3,8 +3,8 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { signupSchema } from "../extraComponents/Schemas";
-import ConfirmDialog from "../extraComponents/ConfirmDialog";
+import { signupSchema } from "../GenericComponents/Schemas";
+import ConfirmDialog from "../GenericComponents/ConfirmDialog";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -63,9 +63,9 @@ function Signup() {
           </section>
 
           <section className="flex flex-col h-[70px] font-poppins">
-            <label htmlFor="email" className="h-[21px] font-semibold text-[16px] text-[#525252]">Email</label>
-            <input type="text" id="email" placeholder="example@ims.np" {...register('email')} className="h-[40px] py-[6px] px-[10px] rounded text-[14px] leading-5 font-normal mt-[6px] border border-[#CCCCCC] placeholder:text-[#CCCCCC] focus:outline-none focus:ring-1 focus:ring-blue-500"/>
-            {errors.email && <span className="h-[15px] text-[12px] font-normal text-red-600 px-[10px] mt-[-3px]">{errors.email.message}</span>}
+            <label htmlFor="username" className="h-[21px] font-semibold text-[16px] text-[#525252]">Username</label>
+            <input type="text" id="username" placeholder="example@ims.np" {...register('username')} className="h-[40px] py-[6px] px-[10px] rounded text-[14px] leading-5 font-normal mt-[6px] border border-[#CCCCCC] placeholder:text-[#CCCCCC] focus:outline-none focus:ring-1 focus:ring-blue-500"/>
+            {errors.username && <span className="h-[15px] text-[12px] font-normal text-red-600 px-[10px] mt-[-3px]">{errors.username.message}</span>}
           </section>
 
           <section className="flex flex-col h-[70px] font-poppins">

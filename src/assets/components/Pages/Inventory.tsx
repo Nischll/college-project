@@ -1,5 +1,5 @@
 import { useState } from "react";
-import GenericFormDialog from "../extraComponents/GenericFormDialogue.tsx";
+import GenericFormDialog from "../GenericComponents/GenericFormDialogue.tsx.tsx";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useMutation, useQuery } from "@tanstack/react-query";
