@@ -107,10 +107,20 @@ function App() {
             {
               path:"manage_staff",
               element:(
-                <ProtectedRoute allowedRoles={["admin", "user"]}>
+                <ProtectedRoute allowedRoles={["admin"]}>
                   <ManageStaff/>
                 </ProtectedRoute>
-              )
+              ),
+              // children: [
+              //   {
+              //     path: "edit",
+              //     element:(
+              //       <ProtectedRoute allowedRoles={["admin"]}>
+              //         <ManageStaff/>
+              //       </ProtectedRoute>
+              //     )
+              //   }
+              // ]
             }
             // {
             //   path:"managestores",

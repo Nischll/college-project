@@ -1,3 +1,4 @@
+import { Outlet } from "react-router-dom";
 import AdminTable from "./AdminTable";
 import UsersTable from "./UsersTable";
 
@@ -20,6 +21,7 @@ const ManageStaff = () => {
         <UsersTable/>
       </section>
     </main>
+    {/* <Outlet/> */}
     </>
   );
 }

@@ -1,5 +1,7 @@
 import axios from "axios";
 import GenericTable from "../../GenericComponents/GenericTable";
+import UpdateButton from "../../GenericComponents/Button";
+import DeleteButton from "../../GenericComponents/TrashButton";
 
 const InventoryTable = () => {
 
@@ -73,7 +75,17 @@ const InventoryTable = () => {
       },
       enableColumnFilter: false,
       enableSorting: false,
-    }
+    },
+    // {
+    //   header: 'Actions',
+    //   enableSorting: false,
+    //   cell: ({getValue}) => {
+    //     const value = getValue();
+    //     if(!value){
+    //       return <div className="flex flex-row gap-2"><UpdateButton/> <DeleteButton/></div>
+    //     }
+    //   }
+    // },
   ];
 
   return (

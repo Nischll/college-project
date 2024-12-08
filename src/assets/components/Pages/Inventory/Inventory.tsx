@@ -34,7 +34,7 @@ const Inventory = () => {
       const today = new Date();
       const selectedDate = new Date(value);
       return selectedDate >= today || "Expiry date cannot be in the past";
-    }, 
+      }, 
     required: true },
   ];
 
@@ -179,6 +179,7 @@ const Inventory = () => {
         open={openDialog}
         onClose={handleCloseDialog}
         onSubmit={handleSubmit}
+        // inputBox={""}
         title="New Product"
         fields={productFields}
         cancelButton="Discard"

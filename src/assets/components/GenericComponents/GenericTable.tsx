@@ -49,7 +49,7 @@ const GenericTable = ({getData, columns, pageSize, enablePagination = true}) => 
         <table className='relative w-full h-fit'>
           <thead>
             {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id} className=' border-b border-gray-500 w-inherit'>
+              <tr key={headerGroup.id} className='border-b border-gray-500 w-inherit'>
                 {headerGroup.headers.map(header => (
                   <th key={header.id} className='text-[17px] leading-[20px] text-gray-800 text-left font-medium h-[35px] bg-slate-200 px-[15px] py-[12px] bg-white'>
                     <div className="flex gap-2">

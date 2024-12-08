@@ -1,8 +1,10 @@
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 
-const GenericFormDialog = ({ open, onClose, onSubmit, title, fields, cancelButton, submitButton }) => {
-  const { handleSubmit, control, reset } = useForm();
+const GenericFormDialog = ({ open, onClose, onSubmit, title, fields, cancelButton, submitButton, defaultValues }) => {
+  const { handleSubmit, control, reset } = useForm({
+    defaultValues: defaultValues || {} 
+  });
 
   const handleFormSubmit = (data) => {
     onSubmit(data); // Pass submitted data back to the parent
@@ -20,7 +22,7 @@ const GenericFormDialog = ({ open, onClose, onSubmit, title, fields, cancelButto
               key={field.id}
               name={field.id}
               control={control}
-              defaultValue=""
+              defaultValue={defaultValues?.[field.name] || ""}
               rules={{
                 required: field.required && `${field.label} is required`,
                 validate: field.validate || undefined,
