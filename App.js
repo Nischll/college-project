@@ -100,7 +100,7 @@ app.get('/signup/get/admins', async (req, res) => {
 
     // Query to fetch users with role 'admin'
     const result = await connection.execute(
-      `SELECT username, name, password, role FROM signup_details WHERE role = 'admin'`,
+      `SELECT id, username, name, password, role FROM signup_details WHERE role = 'admin'`,
       [],
       { outFormat: oracledb.OUT_FORMAT_OBJECT }
     );
@@ -131,7 +131,7 @@ app.get('/signup/get/users', async (req, res) => {
 
     // Query to fetch users with role 'user'
     const result = await connection.execute(
-      `SELECT username, name, password, role FROM signup_details WHERE role = 'user'`,
+      `SELECT id, username, name, password, role FROM signup_details WHERE role = 'user'`,
       [],
       { outFormat: oracledb.OUT_FORMAT_OBJECT }
     );
@@ -152,6 +152,83 @@ app.get('/signup/get/users', async (req, res) => {
     }
   }
 });
+
+// GET SPECIFIC DETAILS FROM SIGNUP TABLE
+app.get('/signup/get/:id', async (req, res) => {
+  const { id } = req.params; // Extract id from the URL
+  let connection;
+
+  try {
+    connection = await oracledb.getConnection(dbConfig);
+
+    // Query to fetch a specific user by id
+    const result = await connection.execute(
+      `SELECT id, username, name, password, role FROM signup_details WHERE id = :id`,
+      { id },
+      { outFormat: oracledb.OUT_FORMAT_OBJECT }
+    );
+
+    // Check if user is found
+    if (result.rows.length === 0) {
+      return res.status(404).send({ message: 'User not found' });
+    }
+
+    // Respond with the fetched data
+    res.status(200).send(result.rows[0]); // Send only the first matching user
+  } catch (err) {
+    console.error('Error executing query for user:', err);
+    res.status(500).send({ error: 'Failed to retrieve user details' });
+  } finally {
+    if (connection) {
+      await connection.close();
+    }
+  }
+});
+
+
+// UPDATE SIGNUP TABLE
+app.put('/signup/update/:id', async (req, res) => {
+  const { id } = req.params; // Extract id from the URL
+  const { username, name, password, role } = req.body; // Get new values from the request body
+  let connection;
+
+  try {
+    // Optionally hash password if it's being updated
+    const hashedPassword = password ? await bcrypt.hash(password, 10) : undefined;
+
+    connection = await oracledb.getConnection(dbConfig);
+
+    // Update query to change user details based on id
+    const result = await connection.execute(
+      `UPDATE signup_details SET username = :username, name = :name, password = :password, role = :role WHERE id = :id`,
+      {
+        username,
+        name,
+        password: hashedPassword || password, // If password is not updated, use the old one
+        role,
+        id
+      },
+      { autoCommit: true }
+    );
+
+    // Check if the update was successful
+    if (result.rowsAffected === 0) {
+      return res.status(404).send({ message: 'User not found or no changes made' });
+    }
+
+    // Respond with a success message
+    res.status(200).send({ message: 'User details updated successfully' });
+  } catch (err) {
+    console.error('Error executing update query:', err);
+    res.status(500).send({ error: 'Failed to update user details' });
+  } finally {
+    if (connection) {
+      await connection.close();
+    }
+  }
+});
+
+
 
 
 // Login API
