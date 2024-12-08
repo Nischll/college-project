@@ -34,7 +34,7 @@ testConnection();
 
 // API to insert data into signup_details table
 app.post('/signup', async (req, res) => {
-  const { email, name, password } = req.body;
+  const { username, name, password } = req.body;
 
   let connection;
 
@@ -43,9 +43,9 @@ app.post('/signup', async (req, res) => {
     connection = await oracledb.getConnection(dbConfig);
 
     const result = await connection.execute(
-      `INSERT INTO signup_details (email, name, password)
-       VALUES (:email, :name, :password)`,
-      { email, name, password:hashedPassword }, 
+      `INSERT INTO signup_details (username, name, password)
+       VALUES (:username, :name, :password)`,
+      { username, name, password:hashedPassword }, 
       { autoCommit: true }  
     );
 
@@ -60,28 +60,91 @@ app.post('/signup', async (req, res) => {
   }
 });
 
-app.get('/signup/get/details', async (req, res) => {
+// app.get('/signup/get/details', async (req, res) => {
+//   let connection;
+
+//   try {
+//     connection = await oracledb.getConnection(dbConfig);
+
+//     // Query to fetch all users from the signup_details table
+//     const result = await connection.execute(
+//       `SELECT username, name, password, role FROM signup_details`,
+//       [], // No parameters needed in the query
+//       { outFormat: oracledb.OUT_FORMAT_OBJECT }  // To get results as objects
+//     );
+
+//     // If no users found, send an appropriate message
+//     if (result.rows.length === 0) {
+//       return res.status(404).send({ message: 'No users found' });
+//     }
+
+//     // Respond with the fetched data
+//     res.status(200).send(result.rows);
+//   } catch (err) {
+//     console.error('Error executing query:', err);
+//     res.status(500).send({ error: 'Failed to retrieve users' });
+//   } finally {
+//     if (connection) {
+//       await connection.close();
+//     }
+//   }
+// });
+
+
+// API to get all admins
+app.get('/signup/get/admins', async (req, res) => {
   let connection;
 
   try {
     connection = await oracledb.getConnection(dbConfig);
 
-    // Query to fetch all users from the signup_details table
+    // Query to fetch users with role 'admin'
     const result = await connection.execute(
-      `SELECT email, name, password, role FROM signup_details`,
-      [], // No parameters needed in the query
-      { outFormat: oracledb.OUT_FORMAT_OBJECT }  // To get results as objects
+      `SELECT username, name, password, role FROM signup_details WHERE role = 'admin'`,
+      [],
+      { outFormat: oracledb.OUT_FORMAT_OBJECT }
     );
 
-    // If no users found, send an appropriate message
-    // if (result.rows.length === 0) {
-    //   return res.status(404).send({ message: 'No users found' });
-    // }
+    // Check if admins are found
+    if (result.rows.length === 0) {
+      return res.status(404).send({ message: 'No admins found' });
+    }
 
     // Respond with the fetched data
     res.status(200).send(result.rows);
   } catch (err) {
-    console.error('Error executing query:', err);
+    console.error('Error executing query for admins:', err);
+    res.status(500).send({ error: 'Failed to retrieve admins' });
+  } finally {
+    if (connection) {
+      await connection.close();
+    }
+  }
+});
+
+// API to get all users
+app.get('/signup/get/users', async (req, res) => {
+  let connection;
+
+  try {
+    connection = await oracledb.getConnection(dbConfig);
+
+    // Query to fetch users with role 'user'
+    const result = await connection.execute(
+      `SELECT username, name, password, role FROM signup_details WHERE role = 'user'`,
+      [],
+      { outFormat: oracledb.OUT_FORMAT_OBJECT }
+    );
+
+    // Check if users are found
+    if (result.rows.length === 0) {
+      return res.status(404).send({ message: 'No users found' });
+    }
+
+    // Respond with the fetched data
+    res.status(200).send(result.rows);
+  } catch (err) {
+    console.error('Error executing query for users:', err);
     res.status(500).send({ error: 'Failed to retrieve users' });
   } finally {
     if (connection) {
@@ -94,7 +157,7 @@ app.get('/signup/get/details', async (req, res) => {
 // Login API
 app.post('/login', async (req, res) => {
 
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   let connection;
 
@@ -102,10 +165,10 @@ app.post('/login', async (req, res) => {
 
     connection = await oracledb.getConnection(dbConfig);
 
-    // Query to find user by email
+    // Query to find user by username
     const result = await connection.execute(
-      `SELECT email, password, role FROM signup_details WHERE email = :email`,
-      { email }
+      `SELECT username, password, role FROM signup_details WHERE username = :username`,
+      { username }
     );
     // console.log('Database query result:', result.rows);
 
@@ -114,23 +177,23 @@ app.post('/login', async (req, res) => {
       return res.status(404).send({ error: 'User not found' });
     }
 
-    const [dbEmail, dbPassword, role] = result.rows[0]; 
-    // console.log('Email:', dbEmail, 'Password:', dbPassword, 'Role:', role);
+    const [dbusername, dbPassword, role] = result.rows[0]; 
+    // console.log('username:', dbusername, 'Password:', dbPassword, 'Role:', role);
 
     // Compare entered password with hashed password
     const isPasswordMatch = await bcrypt.compare(password, dbPassword);
 
     if (!isPasswordMatch) {
-      return res.status(401).send({ error: 'Invalid email or password' });
+      return res.status(401).send({ error: 'Invalid username or password' });
     }
 
-    const token = jwt.sign({ email: dbEmail }, JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ username: dbusername }, JWT_SECRET, { expiresIn: '1h' });
 
     // Success: Send response (or generate JWT here if needed)
     res.status(200).send({ 
       message: 'Login successful', 
       token,
-      user: {email: dbEmail, role}
+      user: {username: dbusername, role}
     });
   } catch (err) {
     console.error('Error during login:', err);
