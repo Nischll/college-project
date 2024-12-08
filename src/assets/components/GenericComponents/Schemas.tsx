@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 const nameRegex = /^[A-Z][a-z]{2,29}(?: [A-Z][a-z]{2,29})(?: [A-Z][a-z]{2,29})?$/
 // const emailRegex = /^[a-zA-Z0-9_]+@ims\.np$/;
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/
+// const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/
 ;
 export const baseSchema = z.object({
   username: z

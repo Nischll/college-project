@@ -52,18 +52,18 @@ const UsersTable = () => {
       cell: ({getValue}) => {
         const value = getValue();
         if(!value){
-          return <div><UpdateButton/> <DeleteButton/></div>
+          return <div className="flex flex-row gap-2"><UpdateButton/> <DeleteButton/></div>
         }
       }
     },
   ]
   return (  
     <>
-    <main className="flex flex-col h-full">
+    <main className="flex flex-col h-[calc(100%-30px)]">
       <GenericTable
       columns={columns}
       getData={fetchUsers}
-      pageSize={6}
+      pageSize={10}
       />
     </main>
     </>

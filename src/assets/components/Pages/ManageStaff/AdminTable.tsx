@@ -62,7 +62,7 @@ const AdminTable = () => {
 
   return (  
     <>
-    <main className="flex flex-col h-full">
+    <main className="flex flex-col h-[calc(100%-30px)]">
       <GenericTable
       columns={columns}
       getData={fetchAdmin}

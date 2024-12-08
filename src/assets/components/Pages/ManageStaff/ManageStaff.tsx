@@ -10,7 +10,7 @@ const ManageStaff = () => {
     staff management
     </header> */}
     <main className="h-full flex flex-col gap-3">
-      <section className="h-2/6 flex flex-col bg-white rounded-lg pt-2 px-2">
+      <section className="h-2/6 flex flex-col bg-white rounded-lg py-2 px-2">
       <h1 className="h-[30px] font-medium text-[20px] leading-[30px] text-[#383E49] w-[163px]">Admins Table</h1>
         <AdminTable/>
       </section>

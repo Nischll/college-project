@@ -15,8 +15,8 @@ function App() {
   const Login = lazy(() => import ("./assets/components/Pages/Login"));
   const Signup = lazy(() => import ("./assets/components/Pages/Signup"));
   const Layout = lazy(() => import ("./assets/components/Layouts/Layout"));
-  const Dashboard = lazy(() => import ("./assets/components/Pages/Dashboard"));
-  const Inventory = lazy(() => import ("./assets/components/Pages/Inventory"));
+  const Dashboard = lazy(() => import ("./assets/components/Pages/Dashboard/Dashboard"));
+  const Inventory = lazy(() => import ("./assets/components/Pages/Inventory/Inventory"));
   const Reports = lazy(() => import ("./assets/components/Pages/Reports"));
   const Orders = lazy(() => import ("./assets/components/Pages/Orders"));
   const ManageStaff = lazy(() => import ("./assets/components/Pages/ManageStaff/ManageStaff"));

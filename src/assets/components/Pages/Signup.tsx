@@ -64,7 +64,7 @@ function Signup() {
 
           <section className="flex flex-col h-[70px] font-poppins">
             <label htmlFor="username" className="h-[21px] font-semibold text-[16px] text-[#525252]">Username</label>
-            <input type="text" id="username" placeholder="example@ims.np" {...register('username')} className="h-[40px] py-[6px] px-[10px] rounded text-[14px] leading-5 font-normal mt-[6px] border border-[#CCCCCC] placeholder:text-[#CCCCCC] focus:outline-none focus:ring-1 focus:ring-blue-500"/>
+            <input type="text" id="username" placeholder="enter unique username" {...register('username')} className="h-[40px] py-[6px] px-[10px] rounded text-[14px] leading-5 font-normal mt-[6px] border border-[#CCCCCC] placeholder:text-[#CCCCCC] focus:outline-none focus:ring-1 focus:ring-blue-500"/>
             {errors.username && <span className="h-[15px] text-[12px] font-normal text-red-600 px-[10px] mt-[-3px]">{errors.username.message}</span>}
           </section>
 

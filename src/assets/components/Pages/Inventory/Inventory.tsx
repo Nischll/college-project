@@ -1,5 +1,5 @@
 import { useState } from "react";
-import GenericFormDialog from "../GenericComponents/GenericFormDialogue.tsx.tsx";
+import GenericFormDialog from "../../GenericComponents/GenericFormDialogue.tsx.tsx";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -171,7 +171,7 @@ const Inventory = () => {
     <main className="bg-white h-fit rounded-lg pt-2 px-2 mt-3">
       <header className="flex justify-between items-center h-[40px]">
         <h1 className="w-[86px] h-[28px] font-semibold text-[22px] leading-[26px] text-[#383E49]">Products</h1>
-        <button onClick={handleOpenDialog} className="flex justify-center h-[35px] w-[116px] py-[7px] px-[12px] bg-[#1366D9] rounded font-normal h-[20px] text-[16px] leading-[20px] text-white hover:bg-[#1e1dc5] active:bg-[#2d1283]">Add Product</button>
+        <button onClick={handleOpenDialog} className="flex justify-center h-[35px] w-[116px] py-[7px] px-[12px] bg-[#1366D9] rounded font-normal h-[20px] text-[16px] leading-[20px] text-white hover:bg-blue-700 active:bg-blue-800">Add Product</button>
       </header>
 
       {/* Generic Form Dialog for Adding Product */}
