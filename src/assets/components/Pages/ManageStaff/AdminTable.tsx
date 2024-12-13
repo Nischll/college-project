@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 const AdminTable = () => {
 
   const [openDialog, setOpenDialog] = useState(false);
+  const [shouldFetch, setShouldFetch] = useState(false);
   // const [data, setData] = useState([]);
   const {id} = useParams();
 
@@ -78,21 +79,24 @@ const AdminTable = () => {
     queryKey: ['get', id],
     queryFn: async () => {
       try{
-        const response = await axios.get(`http://localhost:3000/signup/get/5`);
+        const response = await axios.get(`http://localhost:3000/signup/get/${id}`);
         // setData(response.data);
+        console.log(id);
         return response.data;
       } catch{
         console.error('Error fetching data:');
       }
-    }
+    },
+    enabled: shouldFetch,
   });
   
-  const handleOpenDialog = async () => {
+  const handleOpenDialog = async (id) => {
     // console.log("Edit button clicked");
-  // console.log(data);
-  setOpenDialog(true);
-  
+    console.log('id', id);
+    setShouldFetch(true);
+    setOpenDialog(true);
   };
+  
   // FOR EDIT
   const fields = [
     { name: "NAME", id: "name", label: "Fullname", type: "text", required: true },
@@ -112,6 +116,11 @@ const AdminTable = () => {
     toast.error("Canceled", {
       autoClose: 1000,
     });
+    setShouldFetch(false);
+  };
+
+  const handleSubmit = () => {
+    console.log('submit clicked');
   };
 
   return (  
@@ -128,7 +137,7 @@ const AdminTable = () => {
     <GenericFormDialog
       open={openDialog}
       onClose={handleCloseDialog}
-      // onSubmit={handleSubmit}
+      onSubmit={handleSubmit}
       defaultValues={data}
       title="Edit Admin Details"
       fields={fields}

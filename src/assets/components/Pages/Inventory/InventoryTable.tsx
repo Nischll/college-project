@@ -67,7 +67,7 @@ const InventoryTable = () => {
         // return !value ? <span>Out of Stock</span> : <span className="text-[#10A760]">In Stock</span>
         if(value === 0){
           return <span className="text-[#DA3E33]">Out of stock</span>;
-        }else if(value < 10){
+        }else if(value <= 10){
           return <span className="text-[#E19133]">Low stock</span>;
         }else{
           return <span className="text-[#10A760]">In stock</span>;

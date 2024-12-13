@@ -89,7 +89,7 @@ const GenericTable = ({getData, columns, pageSize, enablePagination = true}) => 
               </tr>
             ) : (
               table.getRowModel().rows.map(row => (
-                <tr key={row.id} className="border-b-[0.5px] border-[#D0D3D9] bg-white">
+                <tr key={row.id} className="border-b-[0.5px] border-[#D0D3D9] bg-white even:bg-gray-100">
                   {row.getVisibleCells().map(cell => (
                     <td key={cell.id} className="font-medium text-[15px] text-gray-700 text-left px-[15px] py-[12px]">
                       {flexRender(
