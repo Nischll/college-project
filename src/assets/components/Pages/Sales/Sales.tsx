@@ -1,7 +1,11 @@
+import { useState } from "react";
+import SalesCart from "./SalesCart";
+import { toast } from "react-toastify";
 import axios from "axios";
 import GenericTable from "../../GenericComponents/GenericTable";
 
-const InventoryTable = () => {
+const Sales = () => {
+  const [cart, setCart] = useState<any[]>([]);
 
   const fetchProductTable = async () => {
     const response = await axios.get("http://localhost:3000/getProducts");
@@ -74,19 +78,73 @@ const InventoryTable = () => {
       enableColumnFilter: false,
       enableSorting: false,
     },
+    {
+      header: "Actions",
+      cell: ({ row }) => (
+        <button
+          onClick={() => addToCart(row.original)}
+          className="bg-blue-500 text-white px-2 py-1 rounded"
+        >
+          Add to Sale
+        </button>
+      ),
+    },
   ];
+
+  const addToCart = (item: any) => {
+    if (cart.some((product) => product.id === item.id)) {
+      toast.warn("Item already added to cart");
+    } else {
+      setCart([...cart, { ...item, soldQuantity: 1 }]);
+    }
+  };
+
+  const handleSale = async () => {
+    try {
+      await axios.post("http://localhost:3000/sales", { cart });
+      toast.success("Sales Recorded Successfully!", {
+        autoClose: 1000,
+      });
+      setCart([]);
+    } catch (error) {
+      toast.error("Failed to Save Sale");
+    }
+  };
 
   return (
     <>
-    <div className="flex flex-col h-[calc(100vh-296px)]">
-      <GenericTable
-        columns={columns}
-        getData={fetchProductTable}
-        pageSize={8}
-      />
-    </div>
+      <main className="bg-white h-full rounded-lg pt-2 px-2">
+        <h1 className="text-2xl font-semibold text-left">Sales</h1>
+
+      <div className="h-[calc(100vh-150px)] flex flex-col">
+        <div>
+          <GenericTable
+          columns={columns}
+          getData={fetchProductTable}
+          pageSize={8}
+        />
+        </div>
+
+        <div className="mt-20">
+          {cart.length > 0 && (
+            <>
+              <SalesCart cart={cart} setCart={setCart} />
+              <button
+                onClick={handleSale}
+                className="bg-green-600 text-white px-4 py-2 rounded"
+              >
+                Confirm Sale
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+
+        
+
+      </main>
     </>
   );
 };
- 
-export default InventoryTable;
+
+export default Sales;

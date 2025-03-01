@@ -1,14 +1,11 @@
 
 
-const TrashButton = ({buttonName}) => {
+const TrashButton = ({buttonName, handleClick}) => {
 
-  const handleDelete = () => {
-    
-  };
 
   return (  
     <>
-    <button className="h-[30px] px-3 bg-red-600 rounded font-normal text-[14px] text-white hover:bg-red-700 active:bg-red-800">{buttonName}</button>
+    <button onClick={handleClick} className="h-[30px] px-3 bg-red-600 rounded font-normal text-[14px] text-white hover:bg-red-700 active:bg-red-800">{buttonName}</button>
     </>
   );
 }

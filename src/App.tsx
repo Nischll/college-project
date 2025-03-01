@@ -9,6 +9,7 @@ import ProtectedRoute from './assets/components/GenericComponents/ProtectedRoute
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import { SidebarProvider } from './assets/components/useContext/SidebarContext';
+import Sales from './assets/components/Pages/Sales/Sales';
 
 function App() {
 
@@ -17,17 +18,16 @@ function App() {
   const Layout = lazy(() => import ("./assets/components/Layouts/Layout"));
   const Dashboard = lazy(() => import ("./assets/components/Pages/Dashboard/Dashboard"));
   const Inventory = lazy(() => import ("./assets/components/Pages/Inventory/Inventory"));
-  const Reports = lazy(() => import ("./assets/components/Pages/Reports"));
-  const Orders = lazy(() => import ("./assets/components/Pages/Orders"));
+  const Reports = lazy(() => import ("./assets/components/Pages/Reports/Reports"));
   const ManageStaff = lazy(() => import ("./assets/components/Pages/ManageStaff/ManageStaff"));
-  const Settings = lazy(() => import ("./assets/components/Pages/Settings"));
+  const SalesTable = lazy(() => import ("./assets/components/Pages/Sales/SalesTable"));
   // const ProductList = lazy(() => import ("./assets/components/Redux/ProductList"));
 
   const Client = new QueryClient();
   return (
     <>
     <SidebarProvider>
-    <ToastContainer/>
+    <ToastContainer limit={1}/>
     <QueryClientProvider client={Client}>
     <Provider store={store}>
     <AuthProvider>
@@ -66,7 +66,7 @@ function App() {
             {
               path: "dashboard",
               element: (
-                <ProtectedRoute allowedRoles={["admin"]}>
+                <ProtectedRoute allowedRoles={["superAdmin"]}>
                   <Dashboard />
                 </ProtectedRoute>
               ),
@@ -74,62 +74,43 @@ function App() {
             {
               path:"inventory",
               element:(
-                <ProtectedRoute allowedRoles={["admin", "user"]}>
+                <ProtectedRoute allowedRoles={["superAdmin", "admin"]}>
                   <Inventory/>
                 </ProtectedRoute>
               ),
             },
             {
+              path:"sales",
+              element:(
+                <ProtectedRoute allowedRoles={["superAdmin", "admin", "user"]}>
+                  <Sales/>
+                </ProtectedRoute>
+              )
+            },
+            {
+              path:"sales_table",
+              element:(
+                <ProtectedRoute allowedRoles={["superAdmin", "admin", "user"]}>
+                  <SalesTable/>
+                </ProtectedRoute>
+              )
+            },
+            {
               path:"reports",
               element:(
-                <ProtectedRoute allowedRoles={["admin"]}>
-                  <Reports/>
+                <ProtectedRoute allowedRoles={["superAdmin"]}>
+                  <Reports />
                 </ProtectedRoute>
               )
             },
-            {
-              path:"orders",
-              element:(
-                <ProtectedRoute allowedRoles={["admin", "user"]}>
-                  <Orders/>
-                </ProtectedRoute>
-              )
-            },
-            {
-              path:"settings",
-              element:(
-                <ProtectedRoute allowedRoles={["admin", "user"]}>
-                  <Settings/>
-                </ProtectedRoute>
-              )
-            },
-            
             {
               path:"manage_staff",
               element:(
-                <ProtectedRoute allowedRoles={["admin"]}>
+                <ProtectedRoute allowedRoles={["superAdmin"]}>
                   <ManageStaff/>
                 </ProtectedRoute>
               ),
-              // children: [
-              //   {
-              //     path: "edit",
-              //     element:(
-              //       <ProtectedRoute allowedRoles={["admin"]}>
-              //         <ManageStaff/>
-              //       </ProtectedRoute>
-              //     )
-              //   }
-              // ]
             }
-            // {
-            //   path:"managestores",
-            //   element:<ManageStores/>
-            // },
-            // {
-            //   path:"product",
-            //   element:<ProductList/>
-            // },
           ]
         },        
       ])}/>

@@ -8,14 +8,14 @@ const Sidebar = () => {
   const { sidebarOpen, toggleSidebar } = useSidebar();
 
   const menuItems = [
-    { name: "Dashboard", path: "dashboard", icon: "home.png", visible: user?.role === "admin" },
-    { name: "Inventory", path: "inventory", icon: "cart.png", visible: true },
-    { name: "Reports", path: "reports", icon: "board.png", visible: user.role === "admin" },
-    { name: "Manage Staff", path: "manage_staff", icon: "suppliers.png", visible: user.role === "admin"  },
-    { name: "Orders", path: "orders", icon: "order.png", visible: true },
+    { name: "Dashboard", path: "dashboard", icon: "home.png", visible: user.role === "superAdmin" },
+    { name: "Inventory", path: "inventory", icon: "cart.png", visible: user.role === "superAdmin" || user.role === "admin" },
+    { name: "Sales", path: "sales", icon: "board.png", visible: true },
+    { name: "Reports", path: "reports", icon: "order.png", visible: user.role === "superAdmin"},
+    { name: "Manage Staff", path: "manage_staff", icon: "suppliers.png", visible: user.role === "superAdmin"  },
   ];
 
-  const footerItems = [{ name: "Settings", path: "settings", icon: "settings.png" }];
+  // const footerItems = [{ name: "Settings", path: "settings", icon: "settings.png" }];
 
   const handleLogout = () => {
     setUser(null);
@@ -63,7 +63,7 @@ const Sidebar = () => {
         {renderSidebar(menuItems)}
       </ul>
 
-      <ul className="flex flex-col gap-[12px] px-4">{renderSidebar(footerItems)}
+      <ul className="flex flex-col gap-[12px] px-4">
         <li
           onClick={handleLogout}
           className="flex items-center gap-[12px] h-[55px] cursor-pointer text-[#7A7A7A] hover:px-2 hover:border hover:border-red-200 hover:shadow-md hover:shadow-red-300 active:shadow-inner active:shadow-red-300 rounded-md"

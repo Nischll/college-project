@@ -1,17 +1,26 @@
-import React from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button} from '@mui/material';
+import React, { ReactNode } from 'react';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+} from '@mui/material';
 
 interface ConfirmDialogProps {
+  children?: ReactNode;
   open: boolean;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm: (data: any) => void;
   title: string;
   description: string;
   confirmationText: string;
   cancellationText: string;
+  showDialogActions?: boolean;
 }
 
 const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
+  children,
   open,
   onClose,
   onConfirm,
@@ -19,21 +28,25 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   description,
   confirmationText,
   cancellationText,
+  showDialogActions = true,
 }) => {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <p>{description}</p>
+        {children ?? children}
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="secondary">
-          {cancellationText}
-        </Button>
-        <Button onClick={onConfirm} variant="contained" color="primary">
-          {confirmationText}
-        </Button>
-      </DialogActions>
+      {showDialogActions && (
+        <DialogActions>
+          <Button onClick={onConfirm} variant="outlined" color="success">
+            {confirmationText}
+          </Button>
+          <Button onClick={onClose} variant="outlined" color="error">
+            {cancellationText}
+          </Button>
+        </DialogActions>
+      )}
     </Dialog>
   );
 };

@@ -1,9 +1,11 @@
+import SalesTable from "../Sales/SalesTable";
+
 const Reports = () => {
   return (
     <>
-    <h1>Reports</h1>
+    <SalesTable />
     </>
-  );
+  )
 }
- 
+
 export default Reports;

@@ -1,15 +1,22 @@
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
+import { useEffect } from "react";
 
 const GenericFormDialog = ({ open, onClose, onSubmit, title, fields, cancelButton, submitButton, defaultValues }) => {
   const { handleSubmit, control, reset } = useForm({
-    defaultValues: defaultValues || {} 
+    defaultValues: defaultValues || {},
   });
 
+  // Reset the form whenever defaultValues change
+  useEffect(() => {
+    if (defaultValues) {
+      reset(defaultValues);
+    }
+  }, [defaultValues, reset]);
+
   const handleFormSubmit = (data) => {
-    onSubmit(data); // Pass submitted data back to the parent
-    reset(); // Reset the form
-    // onClose();
+    onSubmit(data);
+    reset(); // Reset the form after submission
   };
 
   return (
@@ -22,10 +29,9 @@ const GenericFormDialog = ({ open, onClose, onSubmit, title, fields, cancelButto
               key={field.id}
               name={field.id}
               control={control}
-              defaultValue={defaultValues?.[field.name] || ""}
+              defaultValue=""
               rules={{
                 required: field.required && `${field.label} is required`,
-                validate: field.validate || undefined,
                 pattern: field.pattern && {
                   value: field.pattern,
                   message: field.errorMessage || "Invalid format",
@@ -59,7 +65,6 @@ const GenericFormDialog = ({ open, onClose, onSubmit, title, fields, cancelButto
                     margin="normal"
                     error={!!error}
                     helperText={error?.message || ""}
-                    {...(field.InputLabelProps && { InputLabelProps: field.InputLabelProps })}
                   />
                 )
               )}

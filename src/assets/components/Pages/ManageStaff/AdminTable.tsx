@@ -4,16 +4,15 @@ import Button from "../../GenericComponents/Button";
 import GenericFormDialog from "../../GenericComponents/GenericFormDialogue.tsx";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { Row } from "@tanstack/react-table";
+import { useMutation } from "@tanstack/react-query";
 
 
 const AdminTable = () => {
 
   const [openDialog, setOpenDialog] = useState(false);
-  const [shouldFetch, setShouldFetch] = useState(false);
+  const [adminData, setAdminData] = useState(null);
   // const [data, setData] = useState([]);
-  const {id} = useParams();
 
   const fetchAdmin = async () => {
     const response = await axios.get("http://localhost:3000/signup/get/admins");
@@ -21,6 +20,44 @@ const AdminTable = () => {
     return response.data;
   };
 
+  
+  const handleOpenDialog = async (data: any) => {
+    // console.log("Edit button clicked");
+    setAdminData(data);
+    console.log(data);
+    setOpenDialog(true);
+  };
+  
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    // toast.error("Canceled", {
+    //   autoClose: 1000,
+    // });
+    setAdminData(null);
+  };
+  
+  const postFormData = useMutation({
+    mutationKey:["update"],
+    mutationFn(formData){
+      return axios.put(`http://localhost:3000/signup/update/${adminData?.id}`, formData)
+    }
+  });
+
+  const handleSubmit = async (formData: any) => {
+    try {
+      await postFormData.mutate(formData);
+      toast.success("Data Updated Successfully", {
+        autoClose: 1000,
+      }); 
+      setOpenDialog(false);
+    } catch (error) {
+      console.error("Error adding product:");
+      toast.error("Failed to Update Data!", {
+        autoClose: 1000,
+      }); 
+    }
+  };
+  
   const columns =[
     {
       header: 'S.No',
@@ -33,28 +70,28 @@ const AdminTable = () => {
     //   header: 'ID',
     // },
     {
-      accessorKey: 'NAME',
+      accessorKey: 'name',
       header: 'Name',
       enableColumnFilter: false,
     },
     {
-      accessorKey: 'USERNAME',
+      accessorKey: 'username',
       header: 'Username',
       enableSorting: false,
       enableColumnFilter: false,
     },
+    // {
+    //   accessorKey: 'password',
+    //   header: 'Password',
+    //   enableSorting: false,
+    //   enableColumnFilter: false,
+    //   cell: () => {
+    //     // const value = getValue();
+    //     return <span className="text-[#E19133]">**********</span>;
+    //   },
+    // },
     {
-      accessorKey: 'PASSWORD',
-      header: 'Password',
-      enableSorting: false,
-      enableColumnFilter: false,
-      cell: () => {
-        // const value = getValue();
-        return <span className="text-[#E19133]">**********</span>;
-      },
-    },
-    {
-      accessorKey: 'ROLE',
+      accessorKey: 'role',
       header: 'Role',
       cell: ({ getValue }) => {
         const value = getValue();
@@ -66,42 +103,24 @@ const AdminTable = () => {
     {
       header: 'Actions',
       enableSorting: false,
-      cell: ({getValue}) => {
-        const value = getValue();
-        if(!value){
-          return <div><Button handleClick={handleOpenDialog} buttonName = {'Edit'}/></div>
-        }
+      cell: ({row}:{row: Row<any>}) => {
+        const data = row.original;
+          return (
+            <div>
+            <Button handleClick={() =>handleOpenDialog(data)} buttonName = {'Edit'}/>
+              
+          </div>
+          )
       }
     },
   ];
 
-  const {data} = useQuery({
-    queryKey: ['get', id],
-    queryFn: async () => {
-      try{
-        const response = await axios.get(`http://localhost:3000/signup/get/${id}`);
-        // setData(response.data);
-        console.log(id);
-        return response.data;
-      } catch{
-        console.error('Error fetching data:');
-      }
-    },
-    enabled: shouldFetch,
-  });
-  
-  const handleOpenDialog = async (id) => {
-    // console.log("Edit button clicked");
-    console.log('id', id);
-    setShouldFetch(true);
-    setOpenDialog(true);
-  };
   
   // FOR EDIT
   const fields = [
     { name: "NAME", id: "name", label: "Fullname", type: "text", required: true },
     { name: "USERNAME", id: "username", label: "Username", type: "text", required: true },
-    { name: "PASSWORD", id: "password", label: "Password", type: "text", required: true },
+    // { name: "PASSWORD", id: "password", label: "Password", type: "text", required: true },
     { name: "ROLE", id: "role", label: "Role", type: "select", required: true,
       options: [
         { label: "Admin", value: "admin" },
@@ -110,18 +129,6 @@ const AdminTable = () => {
     },
   ];
   
-
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-    toast.error("Canceled", {
-      autoClose: 1000,
-    });
-    setShouldFetch(false);
-  };
-
-  const handleSubmit = () => {
-    console.log('submit clicked');
-  };
 
   return (  
     <>
@@ -138,7 +145,7 @@ const AdminTable = () => {
       open={openDialog}
       onClose={handleCloseDialog}
       onSubmit={handleSubmit}
-      defaultValues={data}
+      defaultValues={adminData}
       title="Edit Admin Details"
       fields={fields}
       cancelButton="Discard"

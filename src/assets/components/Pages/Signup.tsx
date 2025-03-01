@@ -21,7 +21,7 @@ function Signup() {
       }); // Success toast
     },
     onError: () => {
-      toast.error("Signup Failed: user is already exist", {
+      toast.error("Signup Failed!", {
         autoClose: 2000,
       }); // Error toast
     }
