@@ -48,6 +48,7 @@ const GenericFormDialog = ({ open, onClose, onSubmit, title, fields, cancelButto
                     margin="normal"
                     error={!!error}
                     helperText={error?.message || ""}
+                    disabled={field.disabled}
                   >
                     {field.options.map((option) => (
                       <MenuItem key={option.value} value={option.value}>
@@ -65,6 +66,8 @@ const GenericFormDialog = ({ open, onClose, onSubmit, title, fields, cancelButto
                     margin="normal"
                     error={!!error}
                     helperText={error?.message || ""}
+                    slotProps={field.slotProps}
+                    disabled={field.disabled}
                   />
                 )
               )}

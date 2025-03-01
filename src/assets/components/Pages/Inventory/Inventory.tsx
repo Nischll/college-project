@@ -2,20 +2,22 @@ import { useEffect, useState } from "react";
 import GenericFormDialog from "../../GenericComponents/GenericFormDialogue.tsx.tsx";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import InventoryTable from "./InventoryTable.tsx";
 import GenerateExcel from "../../GenericComponents/GenerateExcel.tsx";
 import OverallInventory from "./OverallInventory.tsx";
 
-  const Inventory = () => {
-
+const Inventory = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [prodouctData, setProductData] = useState([]);
 
   const productFields = [
     // { id: "image", label: "Image", type: "file",InputLabelProps: { shrink: true }, required: false },
     { id: "product_name", label: "Product Name", type: "text", required: true },
-    { id: "category", label: "Category", type: "select",
+    {
+      id: "category",
+      label: "Category",
+      type: "select",
       options: [
         { label: "Kitchen Supplies", value: "kitchen supplies" },
         { label: "Beverages", value: "beverages" },
@@ -27,18 +29,30 @@ import OverallInventory from "./OverallInventory.tsx";
         { label: "Sweets & Chocolates", value: "sweets and chocolates" },
         { label: "Others", value: "others" },
       ],
-      required: true },
-    { id: "buying_price", label: "Buying Price", type: "number", required: true },
+      required: true,
+    },
+    {
+      id: "buying_price",
+      label: "Price",
+      type: "number",
+      required: true,
+    },
     { id: "quantity", label: "Quantity", type: "number", required: true },
     { id: "unit", label: "Unit", type: "text", required: true },
-    { id: "expiry_date", label: "Expiry Date", type: "date",
-      InputLabelProps: { shrink: true },
+    {
+      id: "expiry_date",
+      label: "Expiry Date",
+      type: "date",
+      slotProps:{
+        inputLabel: { shrink: true }, 
+      },
       validate: (value: any) => {
-      const today = new Date();
-      const selectedDate = new Date(value);
-      return selectedDate >= today || "Expiry date cannot be in the past";
-      }, 
-    required: true },
+        const today = new Date();
+        const selectedDate = new Date(value);
+        return selectedDate >= today || "Expiry date cannot be in the past";
+      },
+      required: true,
+    },
   ];
 
   const handleOpenDialog = () => setOpenDialog(true);
@@ -50,10 +64,10 @@ import OverallInventory from "./OverallInventory.tsx";
   };
 
   const postFormData = useMutation({
-    mutationKey:["save"],
-    mutationFn(formData){
-      return axios.post("http://localhost:3000/products", formData)
-    }
+    mutationKey: ["save"],
+    mutationFn(formData) {
+      return axios.post("http://localhost:3000/products", formData);
+    },
   });
 
   const handleSubmit = async (formData: any) => {
@@ -61,12 +75,12 @@ import OverallInventory from "./OverallInventory.tsx";
       await postFormData.mutate(formData);
       toast.success("Producted Added Successfully", {
         autoClose: 1000,
-      }); 
+      });
     } catch (error) {
       console.error("Error adding product:");
       toast.error("Failed to Add Product!", {
         autoClose: 1000,
-      }); 
+      });
     }
   };
 
@@ -80,7 +94,7 @@ import OverallInventory from "./OverallInventory.tsx";
   useEffect(() => {
     fetchProductTable();
   }, []);
-  
+
   // const fetchCategoryCount = async () => {
   //   const response = await axios.get('http://localhost:3000/product/category/count');
   //   return response.data.no_of_category;
@@ -98,7 +112,6 @@ import OverallInventory from "./OverallInventory.tsx";
   //   return response.data.total_low_stocks;
   // };
 
-
   // const { data: totalCategories} = useQuery({
   //   queryKey: ['categoryCount'],
   //   queryFn: fetchCategoryCount,
@@ -115,38 +128,44 @@ import OverallInventory from "./OverallInventory.tsx";
   //   queryKey: ['lowStocks'],
   //   queryFn: fetchTotalLowStocks,
   // });
-  
 
   return (
     <>
-    <OverallInventory />
+      <OverallInventory />
 
-    <main className="bg-white h-fit rounded-lg pt-2 px-2 mt-3">
-      <header className="flex justify-between items-center h-[40px]">
-        <h1 className="w-[86px] h-[28px] font-semibold text-[22px] leading-[26px] text-[#383E49]">Products</h1>
-       <div className="flex gap-2">
-        <button onClick={handleOpenDialog} className="bg-blue-600 hover:bg-blue-700 text-white py-[7px] px-[12px] rounded active:bg-blue-800">Add Product</button>
-        <GenerateExcel
-         dataForExcel={prodouctData}
-         fileName="Purchase Report"
+      <main className="bg-white h-fit rounded-lg pt-2 px-2 mt-3">
+        <header className="flex justify-between items-center h-[40px]">
+          <h1 className="w-[86px] h-[28px] font-semibold text-[22px] leading-[26px] text-[#383E49]">
+            Products
+          </h1>
+          <div className="flex gap-2">
+            <button
+              onClick={handleOpenDialog}
+              className="bg-blue-600 hover:bg-blue-700 text-white py-[7px] px-[12px] rounded active:bg-blue-800"
+            >
+              Add Product
+            </button>
+            <GenerateExcel
+              dataForExcel={prodouctData}
+              fileName="Purchase Report"
+            />
+          </div>
+        </header>
+
+        {/* Generic Form Dialog for Adding Product */}
+        <GenericFormDialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          onSubmit={handleSubmit}
+          title="New Product"
+          fields={productFields}
+          cancelButton="Discard"
+          submitButton="Add Product"
+          defaultValues={null}
         />
-       </div>
-      </header>
 
-      {/* Generic Form Dialog for Adding Product */}
-      <GenericFormDialog
-        open={openDialog}
-        onClose={handleCloseDialog}
-        onSubmit={handleSubmit}
-        title="New Product"
-        fields={productFields}
-        cancelButton="Discard"
-        submitButton="Add Product"
-        defaultValues={null}
-      />
-
-      <InventoryTable/>
-    </main>
+        <InventoryTable />
+      </main>
     </>
   );
 };

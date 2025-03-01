@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
 
 const SalesTable = () => {
   const [sales, setSales] = useState([]);
@@ -36,7 +35,7 @@ const SalesTable = () => {
 
   return (
     <>
-    <div className="bg-white h-full rounded-lg pt-2 px-2 space-y-2">
+    <div className="bg-white h-full rounded-lg pt-2 px-2 space-y-2 space-x-2">
         <h1 className="text-2xl font-semibold text-left">
           Sales Table
         </h1>
@@ -82,9 +81,10 @@ const SalesTable = () => {
         </select>
       </div>
 
-      <table className="table-auto w-full border-collapse border border-slate-500">
+      <div className="h-[480px] overflow-y-scroll">
+      <table className="table-auto w-full border-collapse border border-slate-500 ">
         <thead>
-          <tr className="bg-slate-600 text-white">
+          <tr className="bg-slate-500 text-white">
             <th className="p-2 border border-slate-500">ID</th>
             <th className="p-2 border border-slate-500">Product Name</th>
             <th className="p-2 border border-slate-500">Quantity</th>
@@ -121,6 +121,7 @@ const SalesTable = () => {
           )}
         </tbody>
       </table>
+      </div>
     </div>
     </>
   );

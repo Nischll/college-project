@@ -92,24 +92,35 @@ const Sales = () => {
   ];
 
   const addToCart = (item: any) => {
-    if (cart.some((product) => product.id === item.id)) {
-      toast.warn("Item already added to cart");
-    } else {
+
       setCart([...cart, { ...item, soldQuantity: 1 }]);
-    }
   };
+  
 
   const handleSale = async () => {
+    if(cart.length === 0) {
+      toast.warn("Cart is Empty!");
+      return;
+    }
     try {
       await axios.post("http://localhost:3000/sales", { cart });
       toast.success("Sales Recorded Successfully!", {
         autoClose: 1000,
       });
+      toast.clearWaitingQueue();
+  
+      // Clear cart **after** successful sale
       setCart([]);
     } catch (error) {
       toast.error("Failed to Save Sale");
+      toast.clearWaitingQueue();
     }
   };
+
+  const handleClearCart = () => {
+    setCart([]);
+  };
+  
 
   return (
     <>
@@ -121,11 +132,11 @@ const Sales = () => {
           <GenericTable
           columns={columns}
           getData={fetchProductTable}
-          pageSize={8}
+          pageSize={4}
         />
         </div>
 
-        <div className="mt-20">
+        <div className="mt-20 overflow-y-scroll space-x-2">
           {cart.length > 0 && (
             <>
               <SalesCart cart={cart} setCart={setCart} />
@@ -134,6 +145,12 @@ const Sales = () => {
                 className="bg-green-600 text-white px-4 py-2 rounded"
               >
                 Confirm Sale
+              </button>
+              <button
+                onClick={handleClearCart}
+                className="bg-red-500 text-white px-4 py-2 rounded"
+              >
+                Clear All
               </button>
             </>
           )}

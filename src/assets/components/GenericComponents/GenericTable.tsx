@@ -107,7 +107,7 @@ const GenericTable = ({getData, columns, pageSize, enablePagination = true}) => 
 
       {/* PAGINATION */}
       {enablePagination && (
-        <footer className='flex flex-wrap justify-between items-center mt-2'>
+        <footer className='flex flex-wrap justify-between items-center'>
         <div className='flex justify-center item-center py-2 gap-2'>
           <button
             onClick={() => {
