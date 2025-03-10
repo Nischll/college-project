@@ -3,53 +3,63 @@ import SalesCart from "./SalesCart";
 import { toast } from "react-toastify";
 import axios from "axios";
 import GenericTable from "../../GenericComponents/GenericTable";
+import ConfirmDialog from "../../GenericComponents/ConfirmDialog";
 
 const Sales = () => {
   const [cart, setCart] = useState<any[]>([]);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const fetchProductTable = async () => {
     const response = await axios.get("http://localhost:3000/getProducts");
-    console.log(response);
     return response.data;
   };
 
   const columns = [
     {
-      header: 'S.No',
-      cell: ({row}) => {
+      header: "S.No",
+      cell: ({ row }) => {
         return row.index + 1;
       },
     },
     {
-      accessorKey:'product_name',
-      header: 'Products',
+      accessorKey: "product_name",
+      header: "Products",
       cell: ({ getValue }) => {
         const value = getValue();
-        return !value ? <span className="text-red-600">No Value</span> : <span>{value}</span>;
+        return !value ? (
+          <span className="text-red-600">No Value</span>
+        ) : (
+          <span>{value}</span>
+        );
       },
     },
     {
-      accessorKey: 'category',
-      header: 'Categories'
+      accessorKey: "category",
+      header: "Categories",
     },
     {
-      accessorKey: 'buying_price',
-      header: 'Price',
-      cell: ({getValue}) => {
+      accessorKey: "buying_price",
+      header: "Price",
+      cell: ({ getValue }) => {
         const value = getValue();
-        return !value ? <span className='text-red-600'>Null</span> : <span>Rs. {value}</span>
+        return !value ? (
+          <span className="text-red-600">Null</span>
+        ) : (
+          <span>Rs. {value}</span>
+        );
       },
-      enableColumnFilter: false
+      enableColumnFilter: false,
     },
     {
-      accessorKey: 'quantity',
-      header: 'Quantity',
+      accessorKey: "quantity",
+      header: "Quantity",
       cell: ({ row }) => {
         const quantity = row.original.quantity;
         const unit = row.original.unit;
         return `${quantity} ${unit}s`;
       },
-      enableColumnFilter: false,  
+      enableColumnFilter: false,
       sortingFn: (rowA, rowB) => {
         const valueA = `${rowA.original.QUANTITY}`;
         const valueB = `${rowB.original.QUANTITY}`;
@@ -57,21 +67,35 @@ const Sales = () => {
       },
     },
     {
-      accessorKey: 'expiry_date',
-      header: 'Expiry Date',
-      enableColumnFilter: false
-    },
+      accessorKey: "expiry_date",
+      header: "Expiry Date",
+      enableColumnFilter: false,
+      cell: ({ row }) => {
+        const expiryDate = new Date(row.original.expiry_date); // Convert to Date object
+        const today = new Date();
+        const diffDays = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24)); // Difference in days
+    
+        let textColor = ""; // Default color
+        if (diffDays < 0) {
+          textColor = "text-red-600"; // Expired
+        } else if (diffDays <= 7) {
+          textColor = "text-yellow-500"; // Expiring soon
+        }
+    
+        return <span className={textColor}>{expiryDate.toDateString()}</span>;
+      },
+    },    
     {
-      accessorKey: 'quantity',
-      header: 'Availability',
+      accessorKey: "quantity",
+      header: "Availability",
       cell: ({ getValue }) => {
         const value = getValue();
         // return !value ? <span>Out of Stock</span> : <span className="text-[#10A760]">In Stock</span>
-        if(value === 0){
+        if (value === 0) {
           return <span className="text-[#DA3E33]">Out of stock</span>;
-        }else if(value <= 10){
+        } else if (value <= 10) {
           return <span className="text-[#E19133]">Low stock</span>;
-        }else{
+        } else {
           return <span className="text-[#10A760]">In stock</span>;
         }
       },
@@ -92,73 +116,111 @@ const Sales = () => {
   ];
 
   const addToCart = (item: any) => {
-
-      setCart([...cart, { ...item, soldQuantity: 1 }]);
+    setCart([...cart, { ...item, soldQuantity: " " }]);
   };
-  
 
   const handleSale = async () => {
-    if(cart.length === 0) {
+    if (cart.length === 0 || totalPrice === 0) {
       toast.warn("Cart is Empty!");
       return;
     }
     try {
-      await axios.post("http://localhost:3000/sales", { cart });
-      toast.success("Sales Recorded Successfully!", {
-        autoClose: 1000,
+      const response = await axios.post("http://localhost:3000/sales", { cart });
+  
+      // Check if API returned a message
+      if (response.data?.message) {
+        toast.success(response.data.message, {
+          autoClose: 1000,
+        });
+      } else {
+        toast.success("Sales Recorded Successfully!", {
+          autoClose: 1000,
+        });
+      }
+  
+      toast.clearWaitingQueue();
+      setCart([]); // Clear cart after successful sale
+    } catch (error) {
+      // Handle error message from API
+      const errorMessage =
+        error.response?.data?.message || "Failed to Save Sale";
+  
+      toast.error(errorMessage, {
+        autoClose: 2000,
       });
       toast.clearWaitingQueue();
-  
-      // Clear cart **after** successful sale
-      setCart([]);
-    } catch (error) {
-      toast.error("Failed to Save Sale");
-      toast.clearWaitingQueue();
     }
-  };
+  };  
 
   const handleClearCart = () => {
     setCart([]);
   };
-  
 
   return (
     <>
       <main className="bg-white h-full rounded-lg pt-2 px-2">
         <h1 className="text-2xl font-semibold text-left">Sales</h1>
 
-      <div className="h-[calc(100vh-150px)] flex flex-col">
-        <div>
-          <GenericTable
-          columns={columns}
-          getData={fetchProductTable}
-          pageSize={4}
-        />
+        <div className="h-[calc(100vh-150px)] flex flex-col">
+          <div>
+            <GenericTable
+              columns={columns}
+              getData={fetchProductTable}
+              pageSize={4}
+            />
+          </div>
+
+          <div className="mt-20 overflow-y-scroll space-x-2">
+            {cart.length > 0 && (
+              <>
+                {/* Pass setTotalPrice to SalesCart */}
+                <SalesCart
+                  cart={cart}
+                  setCart={setCart}
+                  setTotalPrice={setTotalPrice}
+                />
+                <button
+                  onClick={() => setOpenDeleteDialog(true)}
+                  className="bg-green-600 text-white px-4 py-2 rounded"
+                >
+                  Confirm Sale
+                </button>
+                <button
+                  onClick={handleClearCart}
+                  className="bg-red-500 text-white px-4 py-2 rounded"
+                >
+                  Clear Cart
+                </button>
+              </>
+            )}
+          </div>
         </div>
 
-        <div className="mt-20 overflow-y-scroll space-x-2">
-          {cart.length > 0 && (
-            <>
-              <SalesCart cart={cart} setCart={setCart} />
-              <button
-                onClick={handleSale}
-                className="bg-green-600 text-white px-4 py-2 rounded"
-              >
-                Confirm Sale
-              </button>
-              <button
-                onClick={handleClearCart}
-                className="bg-red-500 text-white px-4 py-2 rounded"
-              >
-                Clear All
-              </button>
-            </>
-          )}
-        </div>
-      </div>
+        <ConfirmDialog
+          open={openDeleteDialog}
+          onClose={() => setOpenDeleteDialog(false)}
+          onConfirm={() => {
+            handleSale();
+            setOpenDeleteDialog(false);
+          }}
+          title="Confirm Sale"
+          description="Are you sure you want to confirm this sale?"
+          cancellationText="No"
+          confirmationText="Yes"
+        >
+          <div className="h-64 p-2">
+            <img
+              src="src/images/qr.png"
+              alt="QR code"
+              className="h-full w-full object-contain"
+            />
+          </div>
 
-        
-
+          {/* Display Total Price Below QR Code */}
+          <div className="mt-4 text-lg font-semibold text-center">
+            Total Price: Rs.{totalPrice}
+          </div>
+        </ConfirmDialog>
       </main>
     </>
   );

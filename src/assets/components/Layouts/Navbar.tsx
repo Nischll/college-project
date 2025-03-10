@@ -7,9 +7,11 @@ const Navbar = () => {
 
   const handleClick = () => {
     if(user.role === "admin"){
-      navigate("/layout/dashboard");
-    }else{
       navigate("/layout/inventory");
+    }else if (user.role === "user"){
+      navigate("/layout/sales");
+    }else{
+      navigate("/layout/dashboard");
     }
   }
   return (

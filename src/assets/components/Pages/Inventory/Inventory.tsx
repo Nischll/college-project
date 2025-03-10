@@ -12,7 +12,6 @@ const Inventory = () => {
   const [prodouctData, setProductData] = useState([]);
 
   const productFields = [
-    // { id: "image", label: "Image", type: "file",InputLabelProps: { shrink: true }, required: false },
     { id: "product_name", label: "Product Name", type: "text", required: true },
     {
       id: "category",
@@ -36,17 +35,28 @@ const Inventory = () => {
       label: "Price",
       type: "number",
       required: true,
+      validate: (value) => {
+        return value >= 0 || "Price cannot be negative";
+      },
     },
-    { id: "quantity", label: "Quantity", type: "number", required: true },
+    {
+      id: "quantity",
+      label: "Quantity",
+      type: "number",
+      required: true,
+      validate: (value) => {
+        return value >= 0 || "Quantity cannot be negative";
+      },
+    },
     { id: "unit", label: "Unit", type: "text", required: true },
     {
       id: "expiry_date",
       label: "Expiry Date",
       type: "date",
-      slotProps:{
-        inputLabel: { shrink: true }, 
+      slotProps: {
+        inputLabel: { shrink: true },
       },
-      validate: (value: any) => {
+      validate: (value) => {
         const today = new Date();
         const selectedDate = new Date(value);
         return selectedDate >= today || "Expiry date cannot be in the past";
@@ -54,13 +64,14 @@ const Inventory = () => {
       required: true,
     },
   ];
+    
 
   const handleOpenDialog = () => setOpenDialog(true);
   const handleCloseDialog = () => {
     setOpenDialog(false);
-    toast.error("Cancel to Add Product", {
-      autoClose: 1000,
-    });
+    // toast.error("Cancel to Add Product", {
+    //   autoClose: 1000,
+    // });
   };
 
   const postFormData = useMutation({
@@ -72,10 +83,19 @@ const Inventory = () => {
 
   const handleSubmit = async (formData: any) => {
     try {
-      await postFormData.mutate(formData);
-      toast.success("Producted Added Successfully", {
-        autoClose: 1000,
+      await postFormData.mutate(formData, {
+        onSuccess: () => {
+          toast.success("Producted Added Successfully", {
+            autoClose: 1000,
+          });
+        },
+        onError: () => {
+          toast.error("Failed to Add Product!", {
+            autoClose: 1000,
+          });
+        }
       });
+    
     } catch (error) {
       console.error("Error adding product:");
       toast.error("Failed to Add Product!", {

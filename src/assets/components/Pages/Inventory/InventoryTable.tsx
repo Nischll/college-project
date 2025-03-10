@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
 
 const InventoryTable = () => {
-
   const [openDialog, setOpenDialog] = useState(false);
   const [productData, setProductData] = useState(null);
 
@@ -24,7 +23,7 @@ const InventoryTable = () => {
     console.log(data);
     setOpenDialog(true);
   };
-  
+
   const handleCloseDialog = () => {
     setOpenDialog(false);
     // toast.error("Canceled", {
@@ -36,11 +35,13 @@ const InventoryTable = () => {
   const updateProduct = useMutation({
     mutationKey: ["update"],
     mutationFn: async (formData) => {
-      const response = await axios.put(`http://localhost:3000/products/${productData?.product_id}`, formData);
+      const response = await axios.put(
+        `http://localhost:3000/products/${productData?.product_id}`,
+        formData
+      );
       return response.data;
-    }
+    },
   });
-  
 
   const handleSubmit = async (formData: any) => {
     try {
@@ -51,9 +52,8 @@ const InventoryTable = () => {
           });
           fetchProductTable();
           setOpenDialog(false);
-        }
+        },
       });
-      
     } catch (error) {
       console.error("Error updating product:", error);
       toast.error("Failed to Update Product!", {
@@ -61,14 +61,13 @@ const InventoryTable = () => {
       });
     }
   };
-  
+
   useEffect(() => {
     fetchProductTable();
-  })
+  });
 
   const productFields = [
-    // { id: "image", label: "Image", type: "file",InputLabelProps: { shrink: true }, required: false },
-    { id: "product_name", label: "Product Name", type: "text", required: true, disabled:true },
+    { id: "product_name", label: "Product Name", type: "text", required: true },
     {
       id: "category",
       label: "Category",
@@ -85,71 +84,92 @@ const InventoryTable = () => {
         { label: "Others", value: "others" },
       ],
       required: true,
-      disabled: true,
     },
     {
       id: "buying_price",
       label: "Price",
       type: "number",
       required: true,
+      validate: (value) => {
+        return value >= 0 || "Price cannot be negative";
+      },
+      disabled: true,
     },
-    { id: "quantity", label: "Quantity", type: "number", required: true },
-    { id: "unit", label: "Unit", type: "text", required: true, disabled: true, },
+    {
+      id: "quantity",
+      label: "Quantity",
+      type: "number",
+      required: true,
+      validate: (value) => {
+        return value >= 0 || "Quantity cannot be negative";
+      },
+      disabled: true,
+    },
+    { id: "unit", label: "Unit", type: "text", required: true, disabled: true },
     {
       id: "expiry_date",
       label: "Expiry Date",
       type: "date",
-      slotProps:{
-        inputLabel: { shrink: true }, 
+      slotProps: {
+        inputLabel: { shrink: true },
       },
-      validate: (value: any) => {
+      validate: (value) => {
         const today = new Date();
         const selectedDate = new Date(value);
         return selectedDate >= today || "Expiry date cannot be in the past";
       },
       required: true,
+      disabled: true,
     },
   ];
 
   const columns = [
     {
-      accessorKey:'product_id',
-      header: 'S.No',
-      cell: ({row}) => {
+      accessorKey: "product_id",
+      header: "S.No",
+      cell: ({ row }) => {
         return row.index + 1;
       },
       enableColumnFilter: false,
     },
     {
-      accessorKey:'product_name',
-      header: 'Products',
+      accessorKey: "product_name",
+      header: "Products",
       cell: ({ getValue }) => {
         const value = getValue();
-        return !value ? <span className="text-red-600">No Value</span> : <span>{value}</span>;
+        return !value ? (
+          <span className="text-red-600">No Value</span>
+        ) : (
+          <span>{value}</span>
+        );
       },
     },
     {
-      accessorKey: 'category',
-      header: 'Categories'
+      accessorKey: "category",
+      header: "Categories",
     },
     {
-      accessorKey: 'buying_price',
-      header: 'Price',
-      cell: ({getValue}) => {
+      accessorKey: "buying_price",
+      header: "Price",
+      cell: ({ getValue }) => {
         const value = getValue();
-        return !value ? <span className='text-red-600'>Null</span> : <span>Rs. {value}</span>
+        return !value ? (
+          <span className="text-red-600">Null</span>
+        ) : (
+          <span>Rs. {value}</span>
+        );
       },
-      enableColumnFilter: false
+      enableColumnFilter: false,
     },
     {
-      accessorKey: 'quantity',
-      header: 'Quantity',
+      accessorKey: "quantity",
+      header: "Quantity",
       cell: ({ row }) => {
         const quantity = row.original.quantity;
         const unit = row.original.unit;
         return `${quantity} ${unit}s`;
       },
-      enableColumnFilter: false,  
+      enableColumnFilter: false,
       sortingFn: (rowA, rowB) => {
         const valueA = `${rowA.original.QUANTITY}`;
         const valueB = `${rowB.original.QUANTITY}`;
@@ -157,21 +177,37 @@ const InventoryTable = () => {
       },
     },
     {
-      accessorKey: 'expiry_date',
-      header: 'Expiry Date',
-      enableColumnFilter: false
+      accessorKey: "expiry_date",
+      header: "Expiry Date",
+      enableColumnFilter: false,
+      cell: ({ row }) => {
+        const expiryDate = new Date(row.original.expiry_date); // Convert to Date object
+        const today = new Date();
+        const diffDays = Math.ceil(
+          (expiryDate - today) / (1000 * 60 * 60 * 24)
+        ); // Difference in days
+
+        let textColor = ""; // Default color
+        if (diffDays < 0) {
+          textColor = "text-red-600"; // Expired
+        } else if (diffDays <= 7) {
+          textColor = "text-yellow-500"; // Expiring soon
+        }
+
+        return <span className={textColor}>{expiryDate.toDateString()}</span>;
+      },
     },
     {
-      accessorKey: 'quantity',
-      header: 'Availability',
+      accessorKey: "quantity",
+      header: "Availability",
       cell: ({ getValue }) => {
         const value = getValue();
         // return !value ? <span>Out of Stock</span> : <span className="text-[#10A760]">In Stock</span>
-        if(value === 0){
+        if (value === 0) {
           return <span className="text-[#DA3E33]">Out of stock</span>;
-        }else if(value <= 10){
+        } else if (value <= 10) {
           return <span className="text-[#E19133]">Low stock</span>;
-        }else{
+        } else {
           return <span className="text-[#10A760]">In stock</span>;
         }
       },
@@ -179,42 +215,44 @@ const InventoryTable = () => {
       enableSorting: false,
     },
     {
-      header: 'Actions',
+      header: "Actions",
       enableSorting: false,
-      cell: ({row}:{row: Row<any>}) => {
+      cell: ({ row }: { row: Row<any> }) => {
         const data = row.original;
-          return (
-            <div>
-            <Button handleClick={() => handleOpenDialog(data)} buttonName = {'+'}/>
-              
+        return (
+          <div>
+            <Button
+              handleClick={() => handleOpenDialog(data)}
+              buttonName="EDIT"
+            />
           </div>
-          )
-      }
+        );
+      },
     },
   ];
 
   return (
     <>
-    <div className="flex flex-col h-[calc(100vh-296px)]">
-      <GenericTable
-        columns={columns}
-        getData={fetchProductTable}
-        pageSize={8}
-      />
+      <div className="flex flex-col h-[calc(100vh-296px)]">
+        <GenericTable
+          columns={columns}
+          getData={fetchProductTable}
+          pageSize={8}
+        />
 
-    <GenericFormDialog
-      open={openDialog}
-      onClose={handleCloseDialog}
-      onSubmit={handleSubmit}
-      defaultValues={productData}
-      title="Edit Product"
-      fields={productFields}
-      cancelButton="Discard"
-      submitButton="Update"
-    />
-    </div>
+        <GenericFormDialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          onSubmit={handleSubmit}
+          defaultValues={productData}
+          title="Edit Product"
+          fields={productFields}
+          cancelButton="Discard"
+          submitButton="Update"
+        />
+      </div>
     </>
   );
 };
- 
+
 export default InventoryTable;

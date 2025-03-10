@@ -36,6 +36,7 @@ const GenericFormDialog = ({ open, onClose, onSubmit, title, fields, cancelButto
                   value: field.pattern,
                   message: field.errorMessage || "Invalid format",
                 },
+                validate: field.validate || null,
               }}
               render={({ field: controllerField, fieldState: { error } }) => (
                 field.type === "select" ? (

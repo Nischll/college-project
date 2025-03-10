@@ -46,7 +46,7 @@ function Login() {
     },
     onError: (error) => {
       console.error("Submission failed:", error);
-      toast.error("Login Failed", {
+      toast.error("No User Found!", {
         autoClose: 1000,
       });
     },

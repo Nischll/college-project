@@ -27,7 +27,7 @@ function App() {
   return (
     <>
     <SidebarProvider>
-    <ToastContainer limit={1}/>
+    <ToastContainer limit={3}/>
     <QueryClientProvider client={Client}>
     <Provider store={store}>
     <AuthProvider>

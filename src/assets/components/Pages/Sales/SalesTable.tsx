@@ -45,7 +45,7 @@ const SalesTable = () => {
         }
         className="bg-green-600 px-4 py-2 text-white rounded-lg hover:bg-green-500"
       >
-        Download Daily Report 📄
+        Download Daily Report
       </button>
 
       {/* Monthly Report Button */}
@@ -56,9 +56,9 @@ const SalesTable = () => {
             "_blank"
           )
         }
-        className="bg-blue-600 px-4 py-2 text-white rounded-lg hover:bg-blue-500"
+        className="bg-green-600 px-4 py-2 text-white rounded-lg hover:bg-blue-500"
       >
-        Download Monthly Report 📅
+        Download Monthly Report
       </button>
 
       {/* Yearly Report Button */}
@@ -66,14 +66,14 @@ const SalesTable = () => {
         onClick={() =>
           window.open(`http://localhost:3000/sales/yearly/report/${currentYear}`, "_blank")
         }
-        className="bg-red-600 px-4 py-2 text-white rounded-lg hover:bg-red-500"
+        className="bg-green-600 px-4 py-2 text-white rounded-lg hover:bg-red-500"
       >
-        Download Yearly Report 📆
+        Download Yearly Report
       </button>
       <div className="flex justify-end my-3">
         <select
           onChange={(e) => setDays(e.target.value)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer"
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg cursor-pointer"
         >
           <option value="5">Last 5 Days</option>
           <option value="30">Last 30 Days</option>
