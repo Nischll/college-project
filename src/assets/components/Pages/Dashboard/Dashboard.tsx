@@ -39,8 +39,8 @@ const Dashboard = () => {
   ];
 
   const amountData = [
-    { name: "Total Product Price", value: parseFloat(data.totalAmount) },
-    { name: "Total Sales Price", value: parseFloat(data.salesAmount) },
+    { name: "Total Product Price (Rs.)", value: parseFloat(data.totalAmount) },
+    { name: "Total Sales Price (Rs.)", value: parseFloat(data.salesAmount) },
   ];
 
   return (
@@ -67,7 +67,7 @@ const Dashboard = () => {
         <h3 className="text-center text-md font-semibold mb-4">Amount Distribution</h3>
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
-            <Pie data={amountData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} fill="#82ca9d" label>
+            <Pie data={amountData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} fill="#82ca9d" label={({value }) => `Rs.${value}`}>
               {amountData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}

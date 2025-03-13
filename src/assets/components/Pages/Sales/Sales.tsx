@@ -124,33 +124,47 @@ const Sales = () => {
       toast.warn("Cart is Empty!");
       return;
     }
+    
     try {
-      const response = await axios.post("http://localhost:3000/sales", { cart });
+      // Hit the sales API first
+      const saleResponse = await axios.post("http://localhost:3000/sales", { cart });
   
-      // Check if API returned a message
-      if (response.data?.message) {
-        toast.success(response.data.message, {
-          autoClose: 1000,
-        });
+      // Check if the sale was recorded successfully
+      if (saleResponse.data?.message) {
+        toast.success(saleResponse.data.message, { autoClose: 1000 });
       } else {
-        toast.success("Sales Recorded Successfully!", {
-          autoClose: 1000,
-        });
+        toast.success("Sales Recorded Successfully!", { autoClose: 1000 });
+      }
+  
+      // Now hit the payment API after a successful sale
+      const paymentResponse = await axios.post("http://localhost:3000/api/payments", { 
+        total_price: totalPrice
+      });
+  
+      // Check if the payment was successful
+      if (paymentResponse.data?.message) {
+        toast.success(paymentResponse.data.message, { autoClose: 1000 });
+      } else {
+        toast.success("Payment Processed Successfully!", { autoClose: 1000 });
       }
   
       toast.clearWaitingQueue();
-      setCart([]); // Clear cart after successful sale
-    } catch (error) {
-      // Handle error message from API
-      const errorMessage =
-        error.response?.data?.message || "Failed to Save Sale";
+      setCart([]); // Clear cart after successful sale and payment
   
-      toast.error(errorMessage, {
-        autoClose: 2000,
-      });
+    } catch (error) {
+      // Handle errors for sales API
+      const errorMessage = error.response?.data?.message || "Failed to Save Sale";
+      toast.error(errorMessage, { autoClose: 2000 });
+  
+      // Handle errors for payment API (if sales API was successful but payment failed)
+      if (error.response?.config?.url === "http://localhost:3000/api/payments") {
+        toast.error("Payment Failed!", { autoClose: 1000 });
+      }
+  
       toast.clearWaitingQueue();
     }
-  };  
+  };
+  
 
   const handleClearCart = () => {
     setCart([]);
